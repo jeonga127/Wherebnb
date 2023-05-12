@@ -25,7 +25,7 @@
 
 📅 API 명세서
 ---------------------------------------
-[웨어비앤비 RESTful API]
+[웨어비앤비 RESTful API](https://www.notion.so/d51fb0accf2346f289b0b48aab0cb4e6?v=7bb6e69cf6824212ac4312097871c3c3&pvs=4)
 
 👨‍💻 Use Case
 ---------------------------------------
