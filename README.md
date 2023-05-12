@@ -33,7 +33,7 @@
 
 🗝 ERD 
 ---------------------------------------
-![image](https://github.com/Jello92/Wherebnb/assets/128972031/71d33264-84af-42d5-ade3-1bca0ced1cd8)
+![image](https://github.com/Jello92/Wherebnb/assets/128972031/460d2f22-696d-416e-a6d0-cd174eaa441d)
 
 🛠 트러블 슈팅
 ---------------------------------------
