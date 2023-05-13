@@ -14,7 +14,7 @@ public class Users {
     private Long id;
 
     @Column(nullable = false)
-    private Long kakaoId;
+    private String kakaoId;
 
     @Column(nullable = false)
     private String username;

@@ -30,9 +30,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    public void setAuthentication(String userId) {
+    public void setAuthentication(String kakaoId) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        Authentication authentication = jwtUtil.createAuthentication(userId);
+        Authentication authentication = jwtUtil.createAuthentication(kakaoId);
         context.setAuthentication(authentication);
 
         SecurityContextHolder.setContext(context);
