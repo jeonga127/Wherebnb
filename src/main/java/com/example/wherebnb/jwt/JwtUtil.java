@@ -42,7 +42,7 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    public String createToken(String username) {
+    public String createToken(String kakaoId) {
         Date date = new Date();
         Date exprTime = (Date)Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
 
@@ -52,7 +52,7 @@ public class JwtUtil {
                 Jwts.builder()
                         .signWith(SignatureAlgorithm.HS512, SECURITY_KEY)
                         .claim("Authorization", "USER") //auth 키에 사용자 권한 value 담기
-                        .setSubject(username) //subject라는 키에 username 넣음
+                        .setSubject(kakaoId) //subject라는 키에 username 넣음
                         .setExpiration(exprTime) //(현재시간 + 1시간)토큰 유효기간 지정
                         .setIssuedAt(date) //언제 토큰이 생성 되었는가
                         .signWith(key, signatureAlgorithm) //생성한 key 객체와 key객체를 어떤 알고리즘을 통해 암호화 할건지 지정
@@ -97,8 +97,8 @@ public class JwtUtil {
     }
 
     // 인증 객체 생성
-    public Authentication createAuthentication(String username) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+    public Authentication createAuthentication(String kakaoId) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(kakaoId);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 }

@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserInfoDto {
     private String username;
-    private Long kakaoId;
+    private String kakaoId;
 
-    public UserInfoDto(String username, Long kakaoId){
+    public UserInfoDto(String username, String kakaoId){
         this.username = username;
         this.kakaoId = kakaoId;
     }

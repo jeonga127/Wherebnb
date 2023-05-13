@@ -14,10 +14,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = userRepository.findByUsername(username)
+    public UserDetails loadUserByUsername(String kakaoId) throws UsernameNotFoundException {
+        Users user = userRepository.findByKakaoId(kakaoId)
                 .orElseThrow(() -> new UsernameNotFoundException("로그인에 실패했습니다."));
 
-        return new UserDetailsImpl(user, user.getUsername());
+        return new UserDetailsImpl(user, user.getKakaoId());
     }
 }
