@@ -61,6 +61,7 @@ public class Rooms extends Timestamped{
     private int price; // 가격
 
 
+
     public Rooms(RoomsRequestDto roomsRequestDto, String kakaoId) {
         this.roomsid = kakaoId;
         this.roomName = roomsRequestDto.getRoomName();
