@@ -10,9 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
-
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -23,18 +21,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         // 헤더의 토큰 가져오기
         String access_token = jwtUtil.resolveToken(request);
-
         if (access_token != null && jwtUtil.validateToken(access_token))
             setAuthentication(jwtUtil.getUserInfoFromToken(access_token));
-
         filterChain.doFilter(request, response);
     }
-
     public void setAuthentication(String kakaoId) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = jwtUtil.createAuthentication(kakaoId);
         context.setAuthentication(authentication);
-
         SecurityContextHolder.setContext(context);
     }
 }

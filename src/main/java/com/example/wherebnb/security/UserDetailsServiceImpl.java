@@ -18,6 +18,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Users user = userRepository.findByKakaoId(kakaoId)
                 .orElseThrow(() -> new UsernameNotFoundException("로그인에 실패했습니다."));
 
-        return new UserDetailsImpl(user, user.getKakaoId());
+        return new UserDetailsImpl(user, user.getUsername());
     }
 }
