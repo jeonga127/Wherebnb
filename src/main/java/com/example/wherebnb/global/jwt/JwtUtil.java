@@ -1,7 +1,5 @@
 package com.example.wherebnb.global.jwt;
 
-import com.example.wherebnb.users.UserRoleEnum;
-import com.sparta.hanghaememo.repository.TokenRepository;
 import com.example.wherebnb.global.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -28,10 +26,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtUtil {
 
-    public static final String ACCESS_HEADER = "ACCESS_HEADER";
-    public static final String REFRESH_HEADER = "REFRESH_HEADER";
-
     private static final String BEARER_PREFIX = "Bearer ";
+
     private final UserDetailsServiceImpl userDetailsService;
 
     @Value("${jwt.secret.key}")
@@ -46,20 +42,16 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    public String createToken(String username, UserRoleEnum role, String token) {
+    public String createToken(String username) {
         Date date = new Date();
-        Date ACCESS_TIME = (Date)Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
-        Date REFRESH_TIME = (Date)Date.from(Instant.now().plus(7, ChronoUnit.DAYS));
-
-        String header = token.equals("ACCESS_HEADER")? ACCESS_HEADER : REFRESH_HEADER;
-        Date exprTime = token.equals("ACCESS_HEADER")? ACCESS_TIME : REFRESH_TIME ;
+        Date exprTime = (Date)Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
 
         //토큰 앞은 Bearer이 붙음
         //String 형식의 jwt토큰으로 반환됨
         return BEARER_PREFIX +
                 Jwts.builder()
                         .signWith(SignatureAlgorithm.HS512, SECURITY_KEY)
-                        .claim(header, role) //auth 키에 사용자 권한 value 담기
+                        .claim("Authorization", "USER") //auth 키에 사용자 권한 value 담기
                         .setSubject(username) //subject라는 키에 username 넣음
                         .setExpiration(exprTime) //(현재시간 + 1시간)토큰 유효기간 지정
                         .setIssuedAt(date) //언제 토큰이 생성 되었는가
@@ -68,10 +60,8 @@ public class JwtUtil {
     }
 
     // header 토큰을 가져오기
-    public String resolveToken(HttpServletRequest request, String header) {
-        String resolveHeader = header.equals("ACCESS_HEADER")? ACCESS_HEADER : REFRESH_HEADER;
-
-        String bearerToken = request.getHeader(resolveHeader);
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
         //토큰 값이 있는지, 토큰 값이 Bearer 로 시작하는지 판단
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             //Bearer를 자른 값을 전달
