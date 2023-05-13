@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
-
     private final Users user;
     private final String kakaoId;
 
@@ -29,7 +28,6 @@ public class UserDetailsImpl implements UserDetails {
         authorities.add(simpleGrantedAuthority);
         return authorities;
     }
-
 
     @Override
     public String getUsername() {
