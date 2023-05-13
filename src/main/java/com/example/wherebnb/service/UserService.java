@@ -1,9 +1,9 @@
 package com.example.wherebnb.service;
 
 import com.example.wherebnb.dto.ResponseDto;
-import com.example.wherebnb.jwt.JwtUtil;
 import com.example.wherebnb.dto.UserInfoDto;
 import com.example.wherebnb.entity.Users;
+import com.example.wherebnb.jwt.JwtUtil;
 import com.example.wherebnb.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -36,17 +35,18 @@ public class UserService {
         UserInfoDto userInfoDto = getUserInfo(accessToken);
 
         //3. user repository에 user가 있는지 확인 / 없다면 넣음
-        if(!userRepository.existsByKakaoId(userInfoDto.getKakaoId()))
+        if (!userRepository.existsByKakaoId(userInfoDto.getKakaoId()))
             userRepository.save(new Users(userInfoDto));
 
         //4. JWT 토큰 반환
-        String token = jwtUtil.createToken(userInfoDto.getUsername());
+        String token = jwtUtil.createToken(userInfoDto.getKakaoId());
 
         Cookie cookie = new Cookie("Authorization", token.substring(7));
         cookie.setPath("/");
         response.addCookie(cookie);
         return ResponseDto.setSuccess("로그인 성공", userInfoDto.getUsername());
     }
+
     private String getToken(String code) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -54,7 +54,7 @@ public class UserService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "8047e89d739d21f2f220a5e8df94ddd0");
-        body.add("redirect_uri", "http://localhost:8080/user/login");
+        body.add("redirect_uri", "http://localhost:8081/user/login");
         body.add("code", code);
 
         // HTTP 요청 보내기
@@ -91,7 +91,7 @@ public class UserService {
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
         String username = jsonNode.get("properties").get("nickname").asText();
-        Long kakaoId = jsonNode.get("id").asLong();
+        String kakaoId = jsonNode.get("id").asText();
 
         return new UserInfoDto(username, kakaoId);
     }
