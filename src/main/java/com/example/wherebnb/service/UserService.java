@@ -21,7 +21,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -67,7 +66,6 @@ public class UserService {
 
         // HTTP 응답 (JSON) -> 액세스 토큰 파싱
         String responseBody = response.getBody();
-        log.info("*******************" + responseBody);
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
@@ -88,7 +86,6 @@ public class UserService {
         ResponseEntity<String> response = rt.exchange(
                 "https://kapi.kakao.com/v2/user/me",
                 HttpMethod.POST, UserInfoRequest, String.class);
-        log.info(response.getBody());
 
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -96,9 +93,6 @@ public class UserService {
 
         String username = jsonNode.get("properties").get("nickname").asText();
         Long kakaoId = jsonNode.get("id").asLong();
-
-        log.info("username : " + username);
-        log.info("kakaoId : " + kakaoId);
 
         return new UserInfoDto(username, kakaoId);
     }
