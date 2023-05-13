@@ -11,11 +11,11 @@ import java.util.Collection;
 public class UserDetailsImpl implements UserDetails {
 
     private final Users user;
-    private final String username;
+    private final String kakaoId;
 
-    public UserDetailsImpl(Users user, String username) {
+    public UserDetailsImpl(Users user, String kakaoId) {
         this.user = user;
-        this.username = username;
+        this.kakaoId = kakaoId;
     }
 
     public Users getUser() {
@@ -30,10 +30,12 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
+
     @Override
     public String getUsername() {
-        return this.getUsername();
+        return this.kakaoId;
     }
+
     @Override
     public String getPassword() {
         return null;
