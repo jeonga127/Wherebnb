@@ -14,12 +14,12 @@ public class Users {
     private Long id;
 
     @Column(nullable = false)
-    private Long kakaoId;
+    private String kakaoId;
 
     @Column(nullable = false)
     private String username;
     public Users(UserInfoDto userInfoDto) {
         this.username = userInfoDto.getUsername();
-        this.kakaoId = userInfoDto.getKakaoId();
+        this.kakaoId = userInfoDto.getKakaoId().toString();
     }
 }

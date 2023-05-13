@@ -37,11 +37,11 @@ public class UserService {
         UserInfoDto userInfoDto = getUserInfo(accessToken);
 
         //3. user repository에 user가 있는지 확인 / 없다면 넣음
-        if(!userRepository.existsByKakaoId(userInfoDto.getKakaoId()))
+        if(!userRepository.existsByKakaoId(userInfoDto.getKakaoId().toString()))
             userRepository.save(new Users(userInfoDto));
 
         //4. JWT 토큰 반환
-        String token = jwtUtil.createToken(userInfoDto.getUsername());
+        String token = jwtUtil.createToken(userInfoDto.getKakaoId().toString());
 
         Cookie cookie = new Cookie("Authorization", token.substring(7));
         cookie.setPath("/");

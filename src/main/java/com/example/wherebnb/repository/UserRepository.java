@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<Users, Long> {
-    boolean existsByKakaoId(Long kakaoId);
+    boolean existsByKakaoId(String kakaoId);
 
-    Optional<Users> findByKakaoId(Long kakaoId);
+    Optional<Users> findByKakaoId(String kakaoId);
 
     Optional<Users> findByUsername(String username);
 
