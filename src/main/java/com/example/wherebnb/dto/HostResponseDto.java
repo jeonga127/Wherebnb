@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -30,8 +32,13 @@ public class HostResponseDto {
     private LocalDateTime endDate; // 종료날짜
     private LocalDateTime createdAt; // 등록일
 
+    private List<Rooms> rooms;
+    private String meassage;
+    private HttpStatus httpStatus;
 
-    public HostResponseDto toHostResponseDtoFullSearch(Rooms room) {
+
+
+    public HostResponseDto toHostResponseDtoFullSearch(Rooms room, String message, HttpStatus httpStatus) {
         return HostResponseDto.builder()
                 .imageurl("image_url")
                 .location(room.getLocation())
@@ -42,7 +49,7 @@ public class HostResponseDto {
                 .build();
     }
 
-    public HostResponseDto toHostResponseDto(Rooms room) {
+    public HostResponseDto toHostResponseDto(Rooms room, String message, HttpStatus httpStatus) {
         return HostResponseDto.builder()
                 .imageurl("imageurl")
                 .roomName(room.getRoomName())
@@ -63,5 +70,10 @@ public class HostResponseDto {
     }
 
 
+    public HostResponseDto (List<Rooms> room, String message, HttpStatus httpStatus) {
+            this.rooms = room;
+            this.meassage = message;
+            this.httpStatus = httpStatus;
+    }
 
 }

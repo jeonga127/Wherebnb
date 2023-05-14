@@ -2,19 +2,25 @@ package com.example.wherebnb.service;
 
 import com.example.wherebnb.dto.HostResponseDto;
 import com.example.wherebnb.entity.Rooms;
+import com.example.wherebnb.gobal.ApiException;
+import com.example.wherebnb.gobal.ExceptionEnum;
 import com.example.wherebnb.repository.RoomsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class HostService {
     private final RoomsRepository roomsRepository;
-
-
 
     // 숙소 전체 검색
     public List<HostResponseDto> getAllRooms() {
@@ -22,22 +28,21 @@ public class HostService {
         List<HostResponseDto> hostResponseDtoList = new ArrayList<>();
         HostResponseDto hostResponseDto = new HostResponseDto();
         for (Rooms room : rooms) {
-            hostResponseDtoList.add(hostResponseDto.toHostResponseDtoFullSearch(room));
+            hostResponseDtoList.add(hostResponseDto.toHostResponseDtoFullSearch(room, "전체 조회 성공", HttpStatus.OK));
         }
         return hostResponseDtoList;
     }
 
     // 숙소 상세조회
     public HostResponseDto getRoomDetail(Long id) {
-        Rooms room = roomsRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("존재하지않는 게시물"));
+        Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_POST));
         HostResponseDto roomDetail = new HostResponseDto();
-        return roomDetail.toHostResponseDto(room);
+        return roomDetail.toHostResponseDto(room, "조건 검색 성공", HttpStatus.OK);
     }
 
-    // 숙소조건검색
 
-
-    // 숙소키워드검색
-
-
+    public HostResponseDto chosesearch(String keyword1, String keyword2){
+        List<Rooms> room =  roomsRepository.findAllByKeyword1OrKeyword2(keyword1, keyword2);
+        return new HostResponseDto(room, "조건 검색 성공", HttpStatus.OK);
+    }
 }

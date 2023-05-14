@@ -1,9 +1,6 @@
 package com.example.wherebnb.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +8,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @NonNull
+@ToString
 public class RoomsRequestDto {
     private String roomName; // 숙소이름
     private String description; // 숙소 설명

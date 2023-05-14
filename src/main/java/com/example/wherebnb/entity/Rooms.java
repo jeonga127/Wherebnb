@@ -4,6 +4,7 @@ import com.example.wherebnb.dto.RoomsRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -11,10 +12,14 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @Getter
+@ToString
 public class Rooms extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String roomsid;
 
     @Column(nullable = false)
     private String roomName; // 숙소 이름
@@ -56,7 +61,9 @@ public class Rooms extends Timestamped{
     private int price; // 가격
 
 
-    public Rooms(RoomsRequestDto roomsRequestDto) {
+
+    public Rooms(RoomsRequestDto roomsRequestDto, String kakaoId) {
+        this.roomsid = kakaoId;
         this.roomName = roomsRequestDto.getRoomName();
         this.description = roomsRequestDto.getDescription();
         this.location = roomsRequestDto.getLocation();
