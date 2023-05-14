@@ -1,13 +1,12 @@
 package com.example.wherebnb.controller;
 
-import com.example.wherebnb.dto.HostResponseDto;
+import com.example.wherebnb.dto.ResponseDto;
 import com.example.wherebnb.service.HostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,14 +16,14 @@ public class HostController {
 
     // 숙소 전체조회
     @GetMapping("/main")
-    public List<HostResponseDto> getAllRooms(){
-        return hostService.getAllRooms();
+    public ResponseDto getAllRooms(Pageable pageable){
+        return hostService.getAllRooms(pageable);
     }
 
 
     //숙소 상세 조회
     @GetMapping("/main/{id}")
-    public HostResponseDto getRoomDetail(@PathVariable Long id){
+    public ResponseDto getRoomDetail(@PathVariable Long id){
         return hostService.getRoomDetail(id);
     }
 
@@ -32,7 +31,7 @@ public class HostController {
 
     // 숙소 키워드 검색
     @GetMapping("/main/keyword")
-    public HostResponseDto chosesearch(String keyword1, String keyword2){
+    public ResponseDto chosesearch(String keyword1, String keyword2){
         return hostService.chosesearch(keyword1, keyword2);
     }
 

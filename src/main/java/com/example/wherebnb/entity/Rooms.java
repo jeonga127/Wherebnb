@@ -6,8 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -17,9 +16,6 @@ public class Rooms extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private String roomsid;
 
     @Column(nullable = false)
     private String roomName; // 숙소 이름
@@ -52,18 +48,20 @@ public class Rooms extends Timestamped{
     private boolean pet; // 애견 동반 가능 여부
 
     @Column(nullable = false)
-    private LocalDateTime startDate; // 시작 날짜
+    private LocalDate startDate; // 시작 날짜
 
     @Column(nullable = false)
-    private LocalDateTime endDate; // 종료 날짜
+    private LocalDate endDate; // 종료 날짜
 
     @Column(nullable = false)
     private int price; // 가격
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private Users user;
 
 
-    public Rooms(RoomsRequestDto roomsRequestDto, String kakaoId) {
-        this.roomsid = kakaoId;
+    public Rooms(RoomsRequestDto roomsRequestDto, Users user) {
         this.roomName = roomsRequestDto.getRoomName();
         this.description = roomsRequestDto.getDescription();
         this.location = roomsRequestDto.getLocation();
@@ -77,11 +75,11 @@ public class Rooms extends Timestamped{
         this.startDate = roomsRequestDto.getStartDate();
         this.endDate = roomsRequestDto.getEndDate();
         this.price = roomsRequestDto.getPrice();
+        this.user = user;
     }
 
-    
     // 수정
-    public void Roomupdate(RoomsRequestDto roomsRequestDto){
+    public void roomUpdate(RoomsRequestDto roomsRequestDto){
         this.roomName = roomsRequestDto.getRoomName();
         this.description = roomsRequestDto.getDescription();
         this.location = roomsRequestDto.getLocation();

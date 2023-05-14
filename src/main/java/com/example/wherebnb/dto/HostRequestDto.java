@@ -15,5 +15,5 @@ public class HostRequestDto {
     private int children; // 어린이숫자
     private boolean infant; // 유아 동반 여부
     private boolean pet; // 반려 동물 동반 여부
-    private String flexible_trip_lengths; // 유여한 일정
+    private String flexibleTripLengths; // 유여한 일정
 }
