@@ -1,5 +1,6 @@
 package com.example.wherebnb.controller;
 
+import com.example.wherebnb.dto.ResponseDto;
 import com.example.wherebnb.dto.RoomsRequestDto;
 import com.example.wherebnb.dto.RoomsResponseDto;
 import com.example.wherebnb.security.UserDetailsImpl;
@@ -18,19 +19,19 @@ public class RoomsController {
 
     // 숙소 등록
     @PostMapping("/room")
-    public RoomsResponseDto roomInsert(@RequestBody @Valid RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseDto roomInsert(@RequestBody RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return roomsService.roomInsert(roomRequestDto, userDetails.getUser());
     }
 
     // 숙소 수정
     @PutMapping("/room/{id}")
-    public RoomsResponseDto roomUpdate(@PathVariable Long id, @RequestBody @Valid RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseDto roomUpdate(@PathVariable Long id, @RequestBody RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return roomsService.roomUpdate(id, roomRequestDto, userDetails.getUser());
     }
 
     // 숙소 삭제
     @DeleteMapping("/room/{id}")
-    public RoomsResponseDto roomDelete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseDto roomDelete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return roomsService.roomDelete(id, userDetails.getUser());
     }
 

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,8 +29,8 @@ public class HostResponseDto {
     private boolean pet; // 애견 동반 가능 여부
     private String location; // 숙소위치
     private int price; // 가격
-    private LocalDateTime startDate; // 시작날짜
-    private LocalDateTime endDate; // 종료날짜
+    private LocalDate startDate; // 시작날짜
+    private LocalDate endDate; // 종료날짜
     private LocalDateTime createdAt; // 등록일
 
     private List<Rooms> rooms;

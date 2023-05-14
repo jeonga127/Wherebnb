@@ -1,4 +1,4 @@
-package com.example.wherebnb.gobal;
+package com.example.wherebnb.global;
 
 import lombok.Getter;
 

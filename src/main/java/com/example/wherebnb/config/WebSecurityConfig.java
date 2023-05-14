@@ -45,6 +45,7 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity

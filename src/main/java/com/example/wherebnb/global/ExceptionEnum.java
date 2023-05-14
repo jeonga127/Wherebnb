@@ -1,16 +1,11 @@
-package com.example.wherebnb.gobal;
+package com.example.wherebnb.global;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ExceptionEnum {
-    NOT_FOUND_POST(HttpStatus.NOT_FOUND, "404", "게시글이 존재하지 않습니다.");
-
-
-
-
-    
+    NOT_FOUND_ROOM(HttpStatus.NOT_FOUND, "404", "존재하지 않는 숙소입니다.");
 
     // 400 Bad Request
 //    BAD_REQUEST(HttpStatus.BAD_REQUEST, "400", "아이디 또는 비밀번호가 일치하지 않습니다."),
