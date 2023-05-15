@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @ToString
-public class Rooms extends Timestamped{
+public class Rooms extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -56,6 +56,9 @@ public class Rooms extends Timestamped{
     @Column(nullable = false)
     private int price; // 가격
 
+    @Column(nullable = false)
+    private int likesNum;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
@@ -76,10 +79,11 @@ public class Rooms extends Timestamped{
         this.endDate = roomsRequestDto.getEndDate();
         this.price = roomsRequestDto.getPrice();
         this.user = user;
+        this.likesNum = 0;
     }
 
     // 수정
-    public void roomUpdate(RoomsRequestDto roomsRequestDto){
+    public void roomUpdate(RoomsRequestDto roomsRequestDto) {
         this.roomName = roomsRequestDto.getRoomName();
         this.description = roomsRequestDto.getDescription();
         this.location = roomsRequestDto.getLocation();
@@ -93,5 +97,9 @@ public class Rooms extends Timestamped{
         this.startDate = roomsRequestDto.getStartDate();
         this.endDate = roomsRequestDto.getEndDate();
         this.price = roomsRequestDto.getPrice();
+    }
+
+    public void updateLikes(boolean likeStatus) {
+        this.likesNum = likeStatus ? likesNum++ : likesNum--;
     }
 }

@@ -1,19 +1,19 @@
 package com.example.wherebnb.service;
 
-import com.example.wherebnb.dto.HostResponseDto;
 import com.example.wherebnb.dto.ResponseDto;
+import com.example.wherebnb.entity.Likes;
 import com.example.wherebnb.entity.Rooms;
-import com.example.wherebnb.global.ApiException;
-import com.example.wherebnb.global.ExceptionEnum;
+import com.example.wherebnb.exception.ApiException;
+import com.example.wherebnb.exception.ExceptionEnum;
+import com.example.wherebnb.repository.LikesRepository;
 import com.example.wherebnb.repository.RoomsRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.wherebnb.dto.HostFullResponseDto;
 
 import org.springframework.data.domain.Pageable;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,12 +21,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class HostService {
+
     private final RoomsRepository roomsRepository;
+    private final LikesRepository likesRepository;
 
     // 숙소 전체 검색
     public ResponseDto getAllRooms(Pageable pageable) {
         List<HostFullResponseDto> roomList = roomsRepository.findAll(pageable).getContent()
                 .stream().map(HostFullResponseDto::new).collect(Collectors.toList());
+
         return ResponseDto.setSuccess("전체 조회 성공", roomList);
     }
 

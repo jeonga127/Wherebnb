@@ -8,10 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface RoomsRepository extends JpaRepository<Rooms, Long> {
-
-    //     키워드 조건 검색
-//    List<Rooms> findAllByKeyword1OrKeyword2(String keyword1, String keyword2);
    Page<Rooms> findAll(Pageable pageable);
-
    List<Rooms> findAllByKeyword1OrKeyword2(String keyword1, String keyword2);
 }

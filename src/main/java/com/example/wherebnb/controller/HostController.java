@@ -21,6 +21,7 @@ public class HostController {
     }
 
 
+
     //숙소 상세 조회
     @GetMapping("/main/{id}")
     public ResponseDto getRoomDetail(@PathVariable Long id){
@@ -34,6 +35,4 @@ public class HostController {
     public ResponseDto chosesearch(String keyword1, String keyword2){
         return hostService.chosesearch(keyword1, keyword2);
     }
-
-
 }

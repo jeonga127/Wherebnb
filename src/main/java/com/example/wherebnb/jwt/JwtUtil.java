@@ -25,15 +25,18 @@ import java.util.Date;
 public class JwtUtil {
     private static final String BEARER_PREFIX = "Bearer ";
     private final UserDetailsServiceImpl userDetailsService;
+
     @Value("${jwt.secret.key}")
     private String SECURITY_KEY;
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256; //HS256 암호화 알고리즘 사용
+
     @PostConstruct
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(SECURITY_KEY);
         key = Keys.hmacShaKeyFor(bytes);
     }
+
     // 토큰 생성
     public String createToken(String kakaoId) {
         Date date = new Date();
@@ -50,6 +53,7 @@ public class JwtUtil {
                         .signWith(key, signatureAlgorithm) //생성한 key 객체와 key객체를 어떤 알고리즘을 통해 암호화 할건지 지정
                         .compact();
     }
+
     // header 토큰을 가져오기
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
@@ -60,6 +64,7 @@ public class JwtUtil {
         }
         return null;
     }
+
     // 토큰 검증
     public boolean validateToken(String token) {
         try {
@@ -78,12 +83,14 @@ public class JwtUtil {
         }
         return false;
     }
+
     // 토큰에서 사용자 정보 가져오기
     public String getUserInfoFromToken(String token) {
         // token 을 키를 사용해 복호화
         //검증 하고, token 의 payload 에서 getBody().getSubject() 를 통해서 안에 들어있는 정보를 가져옴
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
+
     // 인증 객체 생성
     public Authentication createAuthentication(String kakaoId) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(kakaoId);

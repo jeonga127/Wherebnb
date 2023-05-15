@@ -34,10 +34,9 @@ public class HostResponseDto {
     private LocalDateTime createdAt; // 등록일
 
     private List<Rooms> rooms;
-    private String meassage;
+    private String message;
     private HttpStatus httpStatus;
-
-
+    private int likesNum;
 
     public HostResponseDto toHostResponseDtoFullSearch(Rooms room, String message, HttpStatus httpStatus) {
         return HostResponseDto.builder()
@@ -67,14 +66,13 @@ public class HostResponseDto {
                 .startDate(room.getStartDate())
                 .endDate(room.getEndDate())
                 .createdAt(room.getCreatedDate())
+                .likesNum(room.getLikesNum())
                 .build();
     }
 
-
     public HostResponseDto (List<Rooms> room, String message, HttpStatus httpStatus) {
             this.rooms = room;
-            this.meassage = message;
+            this.message = message;
             this.httpStatus = httpStatus;
     }
-
 }

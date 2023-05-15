@@ -67,8 +67,6 @@ public class UserService {
 
         // HTTP 응답 (JSON) -> 액세스 토큰 파싱
         String responseBody = response.getBody();
-        log.info("*******************" + responseBody);
-
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         return jsonNode.get("access_token").asText();
@@ -82,7 +80,6 @@ public class UserService {
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         // HTTP 요청 보내기
-        // CORS 에러가 여기서 나는것같아요 그래서 결과가 없으니까 뒤의 SQL문도 줄줄이 실패하는 것 같습니당 (보통은 그 전에 중지되지 않나 싶긴 한데)
         HttpEntity<MultiValueMap<String, String>> UserInfoRequest = new HttpEntity<>(headers);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(

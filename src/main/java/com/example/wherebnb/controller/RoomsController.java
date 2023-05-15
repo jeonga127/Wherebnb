@@ -35,4 +35,8 @@ public class RoomsController {
         return roomsService.roomDelete(id, userDetails.getUser());
     }
 
+    @PutMapping("/like/{id}")
+    public ResponseDto roomLikes(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return roomsService.roomLikes(id, userDetails.getUser());
+    }
 }

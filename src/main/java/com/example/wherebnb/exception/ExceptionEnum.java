@@ -1,4 +1,4 @@
-package com.example.wherebnb.global;
+package com.example.wherebnb.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
