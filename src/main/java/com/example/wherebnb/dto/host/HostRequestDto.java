@@ -12,8 +12,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HostRequestDto {
-    private LocalDate startDate; // 체크인 날짜
-    private LocalDate endDate;// 체크아웃 날짜
+    private LocalDate checkInDate; // 체크인 날짜
+    private LocalDate checkOutDate;// 체크아웃 날짜
     private int adults; // 성인숫자
     private int children; // 어린이숫자
     private boolean infant; // 유아 동반 여부

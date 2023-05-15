@@ -75,8 +75,8 @@ public class HostService {
     }
 
     public List<Rooms> ConditionCheck(HostRequestDto hostreqeuestdto, Pageable pageable){
-        LocalDate startDateTime = hostreqeuestdto.getStartDate();
-        LocalDate endDateTime = hostreqeuestdto.getEndDate();
+        LocalDate checkInDate = hostreqeuestdto.getCheckInDate();
+        LocalDate checkOutDate = hostreqeuestdto.getCheckOutDate();
         int guestNum = hostreqeuestdto.getAdults() + hostreqeuestdto.getChildren();
         List<Rooms> rooms;
         int period = 0;
@@ -88,9 +88,9 @@ public class HostService {
             } else {
                 throw new ApiException(ExceptionEnum.NOT_FOUND_CONDITION);
             }
-            rooms = roomsRepository.findAllByPeriodGreaterThanEqualAndStartDateGreaterThanEqualAndEndDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(period, startDateTime, endDateTime, guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable);
+            rooms = roomsRepository.findAllByPeriodGreaterThanEqualAndCheckInDateGreaterThanEqualAndCheckOutDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(period, checkInDate, checkOutDate, guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable);
         } else {
-            rooms = roomsRepository.findAllByStartDateGreaterThanEqualAndEndDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(startDateTime, endDateTime, guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable);
+            rooms = roomsRepository.findAllByCheckInDateGreaterThanEqualAndCheckOutDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(checkInDate, checkOutDate, guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable);
         }
         return rooms;
     }

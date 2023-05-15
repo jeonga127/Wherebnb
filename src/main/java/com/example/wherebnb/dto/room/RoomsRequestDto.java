@@ -21,7 +21,7 @@ public class RoomsRequestDto {
     private int bathrooomNum; // 욕실 갯수
     private boolean infant; //유아 동반가능여부
     private boolean pet; //애견 동반 가능여부
-    private LocalDate startDate; //시작 날짜
-    private LocalDate endDate; // 종료 날짜
+    private LocalDate checkInDate; //시작 날짜
+    private LocalDate checkOutDate; // 종료 날짜
     private int price; //요금
 }

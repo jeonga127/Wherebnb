@@ -27,8 +27,8 @@ public class HostDetailResponseDto {
     private boolean pet; // 애견 동반 가능 여부
     private String location; // 숙소위치
     private int price; // 가격
-    private LocalDate startDate; // 시작날짜
-    private LocalDate endDate; // 종료날짜
+    private LocalDate checkInDate; // 시작날짜
+    private LocalDate checkOutDate; // 종료날짜
     private LocalDateTime createdAt; // 등록일
     private int likesNum;
 
@@ -46,8 +46,8 @@ public class HostDetailResponseDto {
                 .pet(room.isPet())
                 .location(room.getLocation())
                 .price(room.getPrice())
-                .startDate(room.getStartDate())
-                .endDate(room.getEndDate())
+                .checkInDate(room.getCheckInDate())
+                .checkOutDate(room.getCheckOutDate())
                 .createdAt(room.getCreatedAt())
                 .likesNum(room.getLikesNum())
                 .build();
