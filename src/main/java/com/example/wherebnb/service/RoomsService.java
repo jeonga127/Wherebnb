@@ -16,6 +16,7 @@ import com.example.wherebnb.repository.FilesRepository;
 import com.example.wherebnb.repository.LikesRepository;
 import com.example.wherebnb.repository.RoomsRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +26,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
+import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -58,8 +61,7 @@ public class RoomsService {
         List<ImageFile> imageFileList = new ArrayList<>();
         Rooms room = roomsRepository.findById(id).orElseThrow(  // 수정할 게시글 있는지 확인
                 () -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
-
-        if (!room.getUser().equals(user))
+        if (!room.getUser().getId().equals(user.getId())) // 권한 체크
             return ResponseDto.setBadRequest("숙소 수정을 할 수 없습니다.", null);
         filesRepository.deleteByRoomId(id); // 해당되는 전체 이미지 삭제
         room.setImageFile(fileFactory(images, room, imageFileList));
@@ -89,7 +91,7 @@ public class RoomsService {
             Likes likes = likesRepository.findByUserIdAndRoomsId(user.getId(), room.getId());
             likesRepository.delete(likes);
             likeStatus = false;
-        } else { // 좋아요
+        } else { // 좋아요 히스토리가 없는 경우 좋아요 +1
             Likes likes = new Likes(room, user);
             likesRepository.save(likes);
             notificationService.notifyLikeEvent(likes); // 좋아요 알림 보내기

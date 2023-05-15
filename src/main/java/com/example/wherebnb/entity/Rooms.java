@@ -1,6 +1,7 @@
 package com.example.wherebnb.entity;
 
 import com.example.wherebnb.dto.RoomsRequestDto;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -109,6 +110,10 @@ public class Rooms extends Timestamped{
         this.price = roomsRequestDto.getPrice();
         //startDate, endDate 사이 기간 계산하고 int로 형변환
         this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getStartDate(), roomsRequestDto.getEndDate());
+    }
+
+    public void setImageFile(List<ImageFile> imageFile){
+        this.imageFile = imageFile;
     }
 
     public void updateLikes(boolean likeStatus) {
