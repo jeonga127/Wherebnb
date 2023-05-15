@@ -6,10 +6,10 @@ import java.time.LocalDate;
 
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @NonNull
-@ToString
 public class RoomsRequestDto {
     private String roomName; // 숙소이름
     private String description; // 숙소 설명
