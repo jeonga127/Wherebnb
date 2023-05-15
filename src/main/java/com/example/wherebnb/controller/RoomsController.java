@@ -28,8 +28,8 @@ public class RoomsController {
 
     // 숙소 수정
     @PutMapping("/room/{id}")
-    public ResponseDto roomUpdate(@PathVariable Long id, @RequestBody RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return roomsService.roomUpdate(id, roomRequestDto, userDetails.getUser());
+    public ResponseDto roomUpdate(@PathVariable Long id, @RequestParam(value = "image", required = false) List<MultipartFile> images, @RequestBody RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return roomsService.roomUpdate(id, roomRequestDto, userDetails.getUser(), images);
     }
 
     // 숙소 삭제

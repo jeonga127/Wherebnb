@@ -45,7 +45,7 @@ public class HostController {
         return hostService.chooseUsersSearch(keyword1,keyword2, userDetails.getUser());
     }
 
-    // 숙소 조건 검색
+
     @GetMapping("/main/condition")
     public ResponseDto getRoomBycondition(
             @RequestParam("startdate") String startDate,
