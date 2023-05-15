@@ -27,8 +27,8 @@ public class SseController {
     public SseEmitter subscribe (@RequestParam("token") String token){
 
         Long kakaoId = Long.valueOf(jwtUtil.getUserInfoFromToken(token));
-
         SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
+
         try{
             sseEmitter.send(SseEmitter.event().name("connect"));
         } catch (IOException e) {

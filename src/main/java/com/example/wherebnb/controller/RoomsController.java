@@ -42,4 +42,9 @@ public class RoomsController {
     public ResponseDto roomLikes(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return roomsService.roomLikes(id, userDetails.getUser());
     }
+
+    @PostMapping("/test")
+    public ResponseDto forTest(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return roomsService.forTest(userDetails.getUser());
+    }
 }

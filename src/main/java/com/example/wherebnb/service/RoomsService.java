@@ -13,7 +13,9 @@ import com.example.wherebnb.exception.ApiException;
 import com.example.wherebnb.exception.ExceptionEnum;
 import com.example.wherebnb.repository.LikesRepository;
 import com.example.wherebnb.repository.RoomsRepository;
+import com.example.wherebnb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ import java.time.temporal.ChronoField;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 public class RoomsService {
@@ -33,6 +36,7 @@ public class RoomsService {
     private final RoomsRepository roomsRepository;
     private final LikesRepository likesRepository;
     private final NotificationService notificationService;
+    private final UserRepository userRepository;
 
     private static final String S3_BUCKET_PREFIX = "S3";
 
@@ -104,21 +108,28 @@ public class RoomsService {
         return ResponseDto.setSuccess("숙소 삭제를 완료하였습니다.", null);
     }
 
-    public ResponseDto roomLikes(Long id, Users user) {
+    public ResponseDto roomLikes(Long id, Users from) {
         Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
         boolean likeStatus = true;
 
-        if (likesRepository.existsByUserIdAndRoomsId(user.getId(), room.getId())) { // 이미 좋아요한 경우 취소
-            Likes likes = likesRepository.findByUserIdAndRoomsId(user.getId(), room.getId());
+        if (likesRepository.existsByUserIdAndRoomsId(from.getId(), room.getId())) { // 이미 좋아요한 경우 취소
+            Likes likes = likesRepository.findByUserIdAndRoomsId(from.getId(), room.getId());
             likesRepository.delete(likes);
             likeStatus = false;
         } else { // 좋아요
-            Likes likes = new Likes(room, user);
+            Likes likes = new Likes(room, from);
             likesRepository.save(likes);
-            notificationService.notifyLikeEvent(likes); // 좋아요 알림 보내기
+            notificationService.notifyLikeEvent(likes, room.getUser()); // 좋아요 알림 보내기
         }
 
         room.updateLikes(likeStatus);
         return ResponseDto.setSuccess("좋아요를 눌렀습니다.", likeStatus);
+    }
+
+    public ResponseDto forTest(Users from) {
+        Users to = userRepository.findByUsername("정아").orElseThrow(()->new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+        log.info("from : " + from.getUsername() + "/ to : " + to.getUsername());
+        notificationService.notifyMe(from, to);
+        return ResponseDto.setSuccess("SSE 테스트용 코드!", null);
     }
 }
