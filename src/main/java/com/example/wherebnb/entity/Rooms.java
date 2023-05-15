@@ -2,6 +2,7 @@ package com.example.wherebnb.entity;
 
 import com.example.wherebnb.dto.RoomsRequestDto;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -14,7 +15,6 @@ import java.time.temporal.ChronoUnit;
 @Entity
 @NoArgsConstructor
 @Getter
-@ToString
 public class Rooms extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,8 +67,11 @@ public class Rooms extends Timestamped{
     private Users user;
 
 
-    public Rooms(RoomsRequestDto roomsRequestDto, Users user) {
+    @Column
+    private String imageUrl;
 
+    @Builder
+    public Rooms(RoomsRequestDto roomsRequestDto, String imageurl ,Users user) {
         this.roomName = roomsRequestDto.getRoomName();
         this.description = roomsRequestDto.getDescription();
         this.location = roomsRequestDto.getLocation();
@@ -84,12 +87,13 @@ public class Rooms extends Timestamped{
         this.price = roomsRequestDto.getPrice();
         this.user = user;
         //startDate, endDate 사이 기간 계산하고 int로 형변환
-        this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getStartDate(), roomsRequestDto.getEndDate());
+//        this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getStartDate(), roomsRequestDto.getEndDate());
+        this.imageUrl = imageurl;
     }
+
 
     // 수정
     public void roomUpdate(RoomsRequestDto roomsRequestDto){
-
         this.roomName = roomsRequestDto.getRoomName();
         this.description = roomsRequestDto.getDescription();
         this.location = roomsRequestDto.getLocation();
@@ -105,5 +109,7 @@ public class Rooms extends Timestamped{
         this.price = roomsRequestDto.getPrice();
         //startDate, endDate 사이 기간 계산하고 int로 형변환
         this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getStartDate(), roomsRequestDto.getEndDate());
+//        this.imageUrl = imageurl;
     }
+
 }

@@ -10,6 +10,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +22,8 @@ public class RoomsController {
 
     // 숙소 등록
     @PostMapping("/room")
-    public ResponseDto roomInsert(@RequestBody RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return roomsService.roomInsert(roomRequestDto, userDetails.getUser());
+    public ResponseDto roomInsert(@RequestParam(value = "image", required = false) List<MultipartFile> images, RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
+        return roomsService.roomInsert(roomRequestDto, userDetails.getUser(), images);
     }
 
     // 숙소 수정

@@ -19,14 +19,11 @@ public class HostController {
         return hostService.getAllRooms(pageable);
     }
 
-
     //숙소 상세 조회
     @GetMapping("/main/{id}")
     public ResponseDto getRoomDetail(@PathVariable Long id){
         return hostService.getRoomDetail(id);
     }
-
-    // 숙소 조건 검색
 
     // 숙소 키워드 검색
     @GetMapping("/main/keyword")
