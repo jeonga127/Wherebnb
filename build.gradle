@@ -42,8 +42,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     // aws s3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation 'software.amazon.awssdk:s3'
+    implementation 'software.amazon.awssdk:aws-sdk-java:2.15.0'
+
     // sentry
     implementation 'io.sentry:sentry-logback:1.7.30'
+
 }
 
 tasks.named('test') {

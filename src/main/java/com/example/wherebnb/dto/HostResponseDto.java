@@ -22,8 +22,8 @@ public class HostResponseDto {
         this.imageUrl = "image_url";
         this.location = room.getLocation();
         this.price = room.getPrice();
-        this.startDate = room.getStartDate();
-        this.endDate = room.getEndDate();
+        this.startDate = room.getCheckInDate();
+        this.endDate = room.getCheckOutDate();
         this.createdAt = room.getCreatedAt();
         this.likeStatus = false;
     }
@@ -32,8 +32,8 @@ public class HostResponseDto {
         this.imageUrl = "image_url";
         this.location = room.getLocation();
         this.price = room.getPrice();
-        this.startDate = room.getStartDate();
-        this.endDate = room.getEndDate();
+        this.startDate = room.getCheckInDate();
+        this.endDate = room.getCheckOutDate();
         this.createdAt = room.getCreatedAt();
         this.likeStatus = likeStatus;
     }
