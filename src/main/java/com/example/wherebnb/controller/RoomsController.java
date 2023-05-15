@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -22,13 +23,13 @@ public class RoomsController {
 
     // 숙소 등록
     @PostMapping("/room")
-    public ResponseDto roomInsert(@RequestParam(value = "image", required = false) List<MultipartFile> images, RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
+    public ResponseDto roomInsert(@RequestParam(value = "images", required = false) List<MultipartFile> images, RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
         return roomsService.roomInsert(roomRequestDto, userDetails.getUser(), images);
     }
 
     // 숙소 수정
     @PutMapping("/room/{id}")
-    public ResponseDto roomUpdate(@PathVariable Long id, @RequestParam(value = "image", required = false) List<MultipartFile> images, @RequestBody RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseDto roomUpdate(@PathVariable("id") Long id , @RequestParam(value = "images", required = false) List<MultipartFile> images, RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         return roomsService.roomUpdate(id, roomRequestDto, userDetails.getUser(), images);
     }
 
@@ -38,8 +39,14 @@ public class RoomsController {
         return roomsService.roomDelete(id, userDetails.getUser());
     }
 
+    // 좋아요 등록
     @PutMapping("/like/{id}")
     public ResponseDto roomLikes(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return roomsService.roomLikes(id, userDetails.getUser());
+    }
+
+    @PostMapping("/test")
+    public ResponseDto forTest(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return roomsService.forTest(userDetails.getUser());
     }
 }

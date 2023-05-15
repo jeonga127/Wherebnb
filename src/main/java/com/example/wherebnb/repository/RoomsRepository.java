@@ -12,14 +12,15 @@ import java.util.List;
 public interface RoomsRepository extends JpaRepository<Rooms, Long> {
    Page<Rooms> findAll(Pageable pageable);
 
-   List<Rooms> findAllByKeyword1OrKeyword2(String keyword1, String keyword2);
+   List<Rooms> findAllByKeyword1OrKeyword2(String keyword1, String keyword2, Pageable pageable);
 
    List<Rooms> findAllByStartDateGreaterThanEqualAndEndDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(
            LocalDate startDate,
            LocalDate endDate,
            int guestNum,
            boolean infant,
-           boolean pet);
+           boolean pet,
+           Pageable pageable);
 
    List<Rooms>findAllByPeriodGreaterThanEqualAndStartDateGreaterThanEqualAndEndDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(
            int period,
@@ -27,5 +28,6 @@ public interface RoomsRepository extends JpaRepository<Rooms, Long> {
            LocalDate endDate,
            int guestNum,
            boolean infant,
-           boolean pet);
+           boolean pet,
+           Pageable pageable);
 }

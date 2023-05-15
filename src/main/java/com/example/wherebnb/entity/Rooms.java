@@ -1,6 +1,7 @@
 package com.example.wherebnb.entity;
 
 import com.example.wherebnb.dto.RoomsRequestDto;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -68,12 +68,12 @@ public class Rooms extends Timestamped{
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> images = new ArrayList<>();
-
+    @JsonManagedReference
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
+    private List<ImageFile> imageFile;
 
     @Builder
-    public Rooms(RoomsRequestDto roomsRequestDto, List<Image> images ,Users user) {
+    public Rooms(RoomsRequestDto roomsRequestDto, Users user) {
         this.roomName = roomsRequestDto.getRoomName();
         this.description = roomsRequestDto.getDescription();
         this.location = roomsRequestDto.getLocation();
@@ -90,12 +90,11 @@ public class Rooms extends Timestamped{
         this.user = user;
         //startDate, endDate 사이 기간 계산하고 int로 형변환
         this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getStartDate(), roomsRequestDto.getEndDate());
-        this.images = images;
         this.likesNum = 0;
     }
 
     // 수정
-    public void roomUpdate(RoomsRequestDto roomsRequestDto, List<Image> newImages){
+    public void roomUpdate(RoomsRequestDto roomsRequestDto){
         this.roomName = roomsRequestDto.getRoomName();
         this.description = roomsRequestDto.getDescription();
         this.location = roomsRequestDto.getLocation();
@@ -111,7 +110,10 @@ public class Rooms extends Timestamped{
         this.price = roomsRequestDto.getPrice();
         //startDate, endDate 사이 기간 계산하고 int로 형변환
         this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getStartDate(), roomsRequestDto.getEndDate());
-        this.images = newImages;
+    }
+
+    public void setImageFile(List<ImageFile> imageFile){
+        this.imageFile = imageFile;
     }
 
     public void updateLikes(boolean likeStatus) {

@@ -3,9 +3,7 @@ package com.example.wherebnb.controller;
 import com.example.wherebnb.dto.ResponseDto;
 import com.example.wherebnb.security.UserDetailsImpl;
 import com.example.wherebnb.service.HostService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -34,18 +32,19 @@ public class HostController {
         return hostService.getRoomDetail(id);
     }
 
-    // 숙소 키워드 검색
+    // 숙소 키워드 검색 (비회원)
     @GetMapping("/main/keyword")
-    public ResponseDto chooseSearch(String keyword1, String keyword2){
-        return hostService.chooseSearch(keyword1, keyword2);
+    public ResponseDto chooseSearch(String keyword1, String keyword2, Pageable pageable){
+        return hostService.chooseSearch(keyword1, keyword2, pageable);
     }
 
+    // 숙소 키워드 검색 (회원)
     @GetMapping("/user/keyword")
-    public ResponseDto chooseSearch(String keyword1, String keyword2, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return hostService.chooseUsersSearch(keyword1,keyword2, userDetails.getUser());
+    public ResponseDto chooseSearch(String keyword1, String keyword2, @AuthenticationPrincipal UserDetailsImpl userDetails, Pageable pageable){
+        return hostService.chooseUsersSearch(keyword1,keyword2, userDetails.getUser(), pageable);
     }
 
-
+    // 숙소 조건 검색 (비회원)
     @GetMapping("/main/condition")
     public ResponseDto getRoomBycondition(
             @RequestParam("startdate") String startDate,
