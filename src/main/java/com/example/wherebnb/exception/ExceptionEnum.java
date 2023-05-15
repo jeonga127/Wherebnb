@@ -5,7 +5,9 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ExceptionEnum {
-    NOT_FOUND_ROOM(HttpStatus.NOT_FOUND, "404", "존재하지 않는 숙소입니다.");
+    NOT_FOUND_ROOM(HttpStatus.NOT_FOUND, "404", "존재하지 않는 숙소입니다."),
+
+    NOT_FOUND_CONDITION(HttpStatus.NOT_FOUND, "400", "유효하지지 않은 flexibleTripLength 값입니다.");
 
     // 400 Bad Request
 //    BAD_REQUEST(HttpStatus.BAD_REQUEST, "400", "아이디 또는 비밀번호가 일치하지 않습니다."),

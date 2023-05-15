@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class HostRequestDto {
-    private LocalDateTime startDate; // 등록날짜
+    private LocalDate startDate; // 체크인 날짜
+    private LocalDate endDate;// 체크아웃 날짜
     private int adults; // 성인숫자
     private int children; // 어린이숫자
     private boolean infant; // 유아 동반 여부

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @NoArgsConstructor
@@ -59,12 +61,16 @@ public class Rooms extends Timestamped {
     @Column(nullable = false)
     private int likesNum;
 
+    @Column(nullable = false)
+    private int period;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
 
     public Rooms(RoomsRequestDto roomsRequestDto, Users user) {
+
         this.roomName = roomsRequestDto.getRoomName();
         this.description = roomsRequestDto.getDescription();
         this.location = roomsRequestDto.getLocation();
@@ -79,6 +85,8 @@ public class Rooms extends Timestamped {
         this.endDate = roomsRequestDto.getEndDate();
         this.price = roomsRequestDto.getPrice();
         this.user = user;
+        //startDate, endDate 사이 기간 계산하고 int로 형변환
+        this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getStartDate(), roomsRequestDto.getEndDate());
         this.likesNum = 0;
     }
 
@@ -97,6 +105,8 @@ public class Rooms extends Timestamped {
         this.startDate = roomsRequestDto.getStartDate();
         this.endDate = roomsRequestDto.getEndDate();
         this.price = roomsRequestDto.getPrice();
+        //startDate, endDate 사이 기간 계산하고 int로 형변환
+        this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getStartDate(), roomsRequestDto.getEndDate());
     }
 
     public void updateLikes(boolean likeStatus) {
