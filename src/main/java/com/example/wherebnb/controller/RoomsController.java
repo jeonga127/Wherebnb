@@ -1,13 +1,10 @@
 package com.example.wherebnb.controller;
 
 import com.example.wherebnb.dto.ResponseDto;
-import com.example.wherebnb.dto.RoomsRequestDto;
-import com.example.wherebnb.dto.RoomsResponseDto;
+import com.example.wherebnb.dto.room.RoomsRequestDto;
 import com.example.wherebnb.security.UserDetailsImpl;
 import com.example.wherebnb.service.RoomsService;
 import lombok.RequiredArgsConstructor;
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

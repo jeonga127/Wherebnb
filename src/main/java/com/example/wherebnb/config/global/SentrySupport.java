@@ -1,4 +1,4 @@
-package com.example.wherebnb.config;
+package com.example.wherebnb.config.global;
 
 import io.sentry.Sentry;
 import io.sentry.event.Event;

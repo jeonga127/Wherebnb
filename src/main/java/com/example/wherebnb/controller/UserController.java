@@ -1,6 +1,6 @@
 package com.example.wherebnb.controller;
 
-import com.example.wherebnb.dto.HostRequestDto;
+import com.example.wherebnb.dto.host.HostRequestDto;
 import com.example.wherebnb.dto.ResponseDto;
 import com.example.wherebnb.security.UserDetailsImpl;
 import com.example.wherebnb.service.HostService;

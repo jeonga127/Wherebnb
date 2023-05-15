@@ -1,4 +1,4 @@
-package com.example.wherebnb.config;
+package com.example.wherebnb.config.global;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

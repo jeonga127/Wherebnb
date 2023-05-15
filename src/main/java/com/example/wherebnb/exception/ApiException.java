@@ -1,6 +1,6 @@
 package com.example.wherebnb.exception;
 
-import com.example.wherebnb.config.SentrySupport;
+import com.example.wherebnb.config.global.SentrySupport;
 import lombok.Getter;
 
 @Getter

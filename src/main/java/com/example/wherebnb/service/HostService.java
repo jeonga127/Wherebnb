@@ -1,20 +1,17 @@
 package com.example.wherebnb.service;
 
-import com.example.wherebnb.dto.HostDetailResponseDto;
-import com.example.wherebnb.dto.HostRequestDto;
-import com.example.wherebnb.dto.HostResponseDto;
+import com.example.wherebnb.dto.host.HostDetailResponseDto;
+import com.example.wherebnb.dto.host.HostRequestDto;
+import com.example.wherebnb.dto.host.HostResponseDto;
 import com.example.wherebnb.dto.ResponseDto;
-import com.example.wherebnb.entity.Likes;
 import com.example.wherebnb.entity.Rooms;
 import com.example.wherebnb.entity.Users;
 import com.example.wherebnb.exception.ApiException;
 import com.example.wherebnb.exception.ExceptionEnum;
 import com.example.wherebnb.repository.LikesRepository;
 import com.example.wherebnb.repository.RoomsRepository;
-import com.example.wherebnb.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
