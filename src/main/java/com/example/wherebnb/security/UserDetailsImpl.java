@@ -33,7 +33,6 @@ public class UserDetailsImpl implements UserDetails {
     public String getUsername() {
         return this.kakaoId;
     }
-
     @Override
     public String getPassword() {
         return null;

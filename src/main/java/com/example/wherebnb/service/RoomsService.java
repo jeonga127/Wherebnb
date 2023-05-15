@@ -13,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -22,6 +20,7 @@ public class RoomsService {
 
     private final RoomsRepository roomsRepository;
     private final LikesRepository likesRepository;
+    private final NotificationService notificationService;
 
     // 숙소 등록
     public ResponseDto roomInsert(RoomsRequestDto roomsRequestDto, Users user) {
@@ -61,8 +60,11 @@ public class RoomsService {
             Likes likes = likesRepository.findByUserIdAndRoomsId(user.getId(), room.getId());
             likesRepository.delete(likes);
             likeStatus = false;
-        } else
-            likesRepository.save(new Likes(room, user));
+        } else { // 좋아요
+            Likes likes = new Likes(room, user);
+            likesRepository.save(likes);
+            notificationService.notifyLikeEvent(likes); // 좋아요 알림 보내기
+        }
 
         room.updateLikes(likeStatus);
         return ResponseDto.setSuccess("좋아요를 눌렀습니다.", likeStatus);

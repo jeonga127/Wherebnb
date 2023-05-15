@@ -1,78 +1,40 @@
 package com.example.wherebnb.dto;
 
 import com.example.wherebnb.entity.Rooms;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class HostResponseDto {
-    private String imageurl; // 이미지 url
-    private String roomName; //숙소이름
-    private String description; // 숙소설명
-    private String keyword1; // 키워드1
-    private String keyword2; // 키워드2
-    private int guestNum; // 수용 인원
-    private int bedroomNum; // 침실 갯수
-    private int bedNum; // 침대 갯수
-    private int bathrooomNum; //욕실 갯수
-    private boolean infant; // 유아 동반 가능 여부
-    private boolean pet; // 애견 동반 가능 여부
+    private String imageUrl; // 이미지 url
     private String location; // 숙소위치
     private int price; // 가격
     private LocalDate startDate; // 시작날짜
     private LocalDate endDate; // 종료날짜
     private LocalDateTime createdAt; // 등록일
+    private boolean likeStatus; // 좋아요 갯수
 
-    private List<Rooms> rooms;
-    private String message;
-    private HttpStatus httpStatus;
-    private int likesNum;
-
-    public HostResponseDto toHostResponseDtoFullSearch(Rooms room, String message, HttpStatus httpStatus) {
-        return HostResponseDto.builder()
-                .imageurl("image_url")
-                .location(room.getLocation())
-                .price(room.getPrice())
-                .startDate(room.getStartDate())
-                .endDate(room.getEndDate())
-                .createdAt(room.getCreatedDate())
-                .build();
+    public HostResponseDto(Rooms room) {
+        this.imageUrl = "image_url";
+        this.location = room.getLocation();
+        this.price = room.getPrice();
+        this.startDate = room.getStartDate();
+        this.endDate = room.getEndDate();
+        this.createdAt = room.getCreatedDate();
+        this.likeStatus = false;
     }
 
-    public HostResponseDto toHostResponseDto(Rooms room, String message, HttpStatus httpStatus) {
-        return HostResponseDto.builder()
-                .imageurl("imageurl")
-                .roomName(room.getRoomName())
-                .description(room.getDescription())
-                .keyword1(room.getKeyword1())
-                .keyword2(room.getKeyword2())
-                .guestNum(room.getGuestNum())
-                .bedroomNum(room.getBedroomNum())
-                .bathrooomNum(room.getBathrooomNum())
-                .infant(room.isInfant())
-                .pet(room.isPet())
-                .location(room.getLocation())
-                .price(room.getPrice())
-                .startDate(room.getStartDate())
-                .endDate(room.getEndDate())
-                .createdAt(room.getCreatedDate())
-                .likesNum(room.getLikesNum())
-                .build();
-    }
-
-    public HostResponseDto (List<Rooms> room, String message, HttpStatus httpStatus) {
-            this.rooms = room;
-            this.message = message;
-            this.httpStatus = httpStatus;
+    public HostResponseDto(Rooms room, boolean likeStatus) {
+        this.imageUrl = "image_url";
+        this.location = room.getLocation();
+        this.price = room.getPrice();
+        this.startDate = room.getStartDate();
+        this.endDate = room.getEndDate();
+        this.createdAt = room.getCreatedDate();
+        this.likeStatus = likeStatus;
     }
 }

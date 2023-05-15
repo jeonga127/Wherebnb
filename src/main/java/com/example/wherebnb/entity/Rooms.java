@@ -68,9 +68,7 @@ public class Rooms extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-
     public Rooms(RoomsRequestDto roomsRequestDto, Users user) {
-
         this.roomName = roomsRequestDto.getRoomName();
         this.description = roomsRequestDto.getDescription();
         this.location = roomsRequestDto.getLocation();
@@ -110,6 +108,6 @@ public class Rooms extends Timestamped {
     }
 
     public void updateLikes(boolean likeStatus) {
-        this.likesNum = likeStatus ? likesNum++ : likesNum--;
+        this.likesNum = likeStatus ? likesNum + 1 : likesNum - 1;
     }
 }

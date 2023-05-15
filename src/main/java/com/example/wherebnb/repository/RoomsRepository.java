@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface RoomsRepository extends JpaRepository<Rooms, Long> {
    Page<Rooms> findAll(Pageable pageable);
+
    List<Rooms> findAllByKeyword1OrKeyword2(String keyword1, String keyword2);
 
    List<Rooms> findAllByStartDateGreaterThanEqualAndEndDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(
@@ -27,5 +28,4 @@ public interface RoomsRepository extends JpaRepository<Rooms, Long> {
            int guestNum,
            boolean infant,
            boolean pet);
-
 }
