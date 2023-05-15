@@ -4,17 +4,14 @@ import com.example.wherebnb.dto.HostDetailResponseDto;
 import com.example.wherebnb.dto.HostRequestDto;
 import com.example.wherebnb.dto.HostResponseDto;
 import com.example.wherebnb.dto.ResponseDto;
-import com.example.wherebnb.entity.Likes;
 import com.example.wherebnb.entity.Rooms;
 import com.example.wherebnb.entity.Users;
 import com.example.wherebnb.exception.ApiException;
 import com.example.wherebnb.exception.ExceptionEnum;
 import com.example.wherebnb.repository.LikesRepository;
 import com.example.wherebnb.repository.RoomsRepository;
-import com.example.wherebnb.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,8 +75,8 @@ public class HostService {
     }
 
     public List<Rooms> ConditionCheck(HostRequestDto hostreqeuestdto, Pageable pageable){
-        LocalDate startDateTime = hostreqeuestdto.getStartDate();
-        LocalDate endDateTime = hostreqeuestdto.getEndDate();
+        LocalDate checkInDate = hostreqeuestdto.getCheckInDate();
+        LocalDate checkOutDate = hostreqeuestdto.getCheckOutDate();
         int guestNum = hostreqeuestdto.getAdults() + hostreqeuestdto.getChildren();
         List<Rooms> rooms;
         int period = 0;
@@ -91,9 +88,9 @@ public class HostService {
             } else {
                 throw new ApiException(ExceptionEnum.NOT_FOUND_CONDITION);
             }
-            rooms = roomsRepository.findAllByPeriodGreaterThanEqualAndStartDateGreaterThanEqualAndEndDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(period, startDateTime, endDateTime, guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable);
+            rooms = roomsRepository.findAllByPeriodGreaterThanEqualAndCheckInDateGreaterThanEqualAndCheckOutDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(period, checkInDate, checkOutDate, guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable);
         } else {
-            rooms = roomsRepository.findAllByStartDateGreaterThanEqualAndEndDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(startDateTime, endDateTime, guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable);
+            rooms = roomsRepository.findAllByCheckInDateGreaterThanEqualAndCheckOutDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(checkInDate, checkOutDate, guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable);
         }
         return rooms;
     }

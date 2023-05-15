@@ -50,10 +50,10 @@ public class Rooms extends Timestamped{
     private boolean pet; // 애견 동반 가능 여부
 
     @Column(nullable = false)
-    private LocalDate startDate; // 시작 날짜
+    private LocalDate checkInDate; // 시작 날짜
 
     @Column(nullable = false)
-    private LocalDate endDate; // 종료 날짜
+    private LocalDate checkOutDate; // 종료 날짜
 
     @Column(nullable = false)
     private int price; // 가격
@@ -84,12 +84,12 @@ public class Rooms extends Timestamped{
         this.bathrooomNum = roomsRequestDto.getBathrooomNum();
         this.infant = roomsRequestDto.isInfant();
         this.pet = roomsRequestDto.isPet();
-        this.startDate = roomsRequestDto.getStartDate();
-        this.endDate = roomsRequestDto.getEndDate();
+        this.checkInDate = roomsRequestDto.getCheckInDate();
+        this.checkOutDate = roomsRequestDto.getCheckOutDate();
         this.price = roomsRequestDto.getPrice();
         this.user = user;
         //startDate, endDate 사이 기간 계산하고 int로 형변환
-        this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getStartDate(), roomsRequestDto.getEndDate());
+        this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getCheckInDate(), roomsRequestDto.getCheckOutDate());
         this.likesNum = 0;
     }
 
@@ -105,11 +105,11 @@ public class Rooms extends Timestamped{
         this.bathrooomNum = roomsRequestDto.getBathrooomNum();
         this.infant = roomsRequestDto.isInfant();
         this.pet = roomsRequestDto.isPet();
-        this.startDate = roomsRequestDto.getStartDate();
-        this.endDate = roomsRequestDto.getEndDate();
+        this.checkInDate = roomsRequestDto.getCheckInDate();
+        this.checkOutDate = roomsRequestDto.getCheckOutDate();
         this.price = roomsRequestDto.getPrice();
         //startDate, endDate 사이 기간 계산하고 int로 형변환
-        this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getStartDate(), roomsRequestDto.getEndDate());
+        this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getCheckInDate(), roomsRequestDto.getCheckOutDate());
     }
 
     public void setImageFile(List<ImageFile> imageFile){
