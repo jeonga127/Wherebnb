@@ -1,5 +1,6 @@
 package com.example.wherebnb.dto;
 
+import com.example.wherebnb.entity.ImageFile;
 import lombok.*;
 
 import java.time.LocalDate;
