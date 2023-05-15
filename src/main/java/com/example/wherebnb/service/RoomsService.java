@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.wherebnb.dto.ResponseDto;
+import com.example.wherebnb.dto.host.HostResponseDto;
 import com.example.wherebnb.dto.room.RoomsRequestDto;
 import com.example.wherebnb.entity.ImageFile;
 import com.example.wherebnb.entity.Likes;
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -49,7 +51,7 @@ public class RoomsService {
     private final AmazonS3 amazonS3;
 
     // 숙소 등록
-    public ResponseDto roomInsert(RoomsRequestDto roomsRequestDto, Users user, List<MultipartFile> images) throws IOException {
+    public ResponseDto<?> roomInsert(RoomsRequestDto roomsRequestDto, Users user, List<MultipartFile> images) throws IOException {
         Rooms rooms = Rooms.builder().roomsRequestDto(roomsRequestDto).user(user).build();
         rooms.setImageFile(fileFactory(images, rooms));
         roomsRepository.save(rooms);
@@ -57,7 +59,7 @@ public class RoomsService {
     }
 
     // 숙소 수정
-    public ResponseDto roomUpdate(Long id, RoomsRequestDto roomsRequestDto, Users user, List<MultipartFile> images) throws IOException {
+    public ResponseDto<?> roomUpdate(Long id, RoomsRequestDto roomsRequestDto, Users user, List<MultipartFile> images) throws IOException {
         Rooms room = roomsRepository.findById(id).orElseThrow(  // 수정할 게시글 있는지 확인
                 () -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
 
@@ -71,7 +73,7 @@ public class RoomsService {
     }
 
     // 숙소 삭제
-    public ResponseDto roomDelete(Long id, Users user) {
+    public ResponseDto<?> roomDelete(Long id, Users user) {
         Rooms room = roomsRepository.findById(id).orElseThrow( // 삭제할 게시글 있는지 확인
                 () -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
 
@@ -84,12 +86,15 @@ public class RoomsService {
     }
 
     // 좋아요한 숙소 조회
-    public ResponseDto getAllLikeRooms(Users user) {
-        return null;
+    @Transactional(readOnly = true)
+    public ResponseDto<List<HostResponseDto>> getAllLikeRooms(Users user) {
+        List<HostResponseDto> likeRoomsList = likesRepository.findAllByUserId(user.getId()).stream()
+                .map(x->new HostResponseDto(x.getRooms())).collect(Collectors.toList());
+        return ResponseDto.setSuccess("좋아요한 숙소 조회를 완료하였습니다.", likeRoomsList);
     }
 
     // 좋아요 등록
-    public ResponseDto roomLikes(Long id, Users from) {
+    public ResponseDto<Boolean> roomLikes(Long id, Users from) {
         Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
         boolean likeStatus = true;
 
@@ -140,9 +145,8 @@ public class RoomsService {
         return imageFileList;
     }
 
-    public ResponseDto forTest(Users from) {
+    public ResponseDto<?> forTest(Users from) {
         Users to = userRepository.findByUsername(from.getUsername()).orElseThrow(()->new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
-        log.info("from : " + from.getUsername() + "/ to : " + to.getUsername());
         notificationService.notifyMe(from, to);
         return ResponseDto.setSuccess("SSE 테스트용 코드!", null);
     }

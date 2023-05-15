@@ -22,7 +22,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Value;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -33,7 +32,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-    public ResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public ResponseDto<String> kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         //1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getToken(code);
 
@@ -89,7 +88,6 @@ public class UserService {
         ResponseEntity<String> response = rt.exchange(
                 "https://kapi.kakao.com/v2/user/me",
                 HttpMethod.POST, UserInfoRequest, String.class);
-        log.info(response.getBody());
 
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -97,9 +95,6 @@ public class UserService {
 
         String username = jsonNode.get("properties").get("nickname").asText();
         Long kakaoId = jsonNode.get("id").asLong();
-
-        log.info("username : " + username);
-        log.info("kakaoId : " + kakaoId);
 
         return new UserInfoDto(username, kakaoId);
     }
