@@ -48,7 +48,7 @@ public class HostDetailResponseDto {
                 .price(room.getPrice())
                 .startDate(room.getStartDate())
                 .endDate(room.getEndDate())
-                .createdAt(room.getCreatedDate())
+                .createdAt(room.getCreatedAt())
                 .likesNum(room.getLikesNum())
                 .build();
     }

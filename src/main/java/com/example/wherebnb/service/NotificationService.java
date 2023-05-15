@@ -35,7 +35,7 @@ public class NotificationService {
             }
         }
     }
-    public void notifyMe(Users from, Users to){
+    public void notifyMe(Users from, Users to){ // SSE 테스트용
         log.info("notifyMe 진입!");
 
         for(Map.Entry<Long,SseEmitter> e : sseEmitters.entrySet())
