@@ -11,15 +11,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import java.time.LocalDateTime;
 
 @Getter
-@EnableJpaAuditing
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class Timestamped {
     //생성시간
     @CreatedDate
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     //수정시간
     @LastModifiedDate
-    private LocalDateTime lastmodifiedDate;
+    private LocalDateTime modifiedAt;
 }

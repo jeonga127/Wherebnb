@@ -17,7 +17,7 @@ public class ImageFile {
     private String imageurl; // 이미지url
 
     @Column(nullable = false)
-    private String originfilename;  // 파일원래이름
+    private String originfilename;  // 파일 원래 이름
 
     @Column(nullable = false)
     private String filename;  // db에 저장될 파일이름
@@ -33,5 +33,4 @@ public class ImageFile {
         this.filename = filename;
         this.room = room;
     }
-
 }

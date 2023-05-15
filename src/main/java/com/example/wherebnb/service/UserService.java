@@ -20,11 +20,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
+    @Value("${KAKAO_API_KEY}")
+    private String kakaoApiKey;
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
@@ -54,7 +58,7 @@ public class UserService {
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "8047e89d739d21f2f220a5e8df94ddd0");
+        body.add("client_id", kakaoApiKey);
         body.add("redirect_uri", "http://localhost:8081/user/login");
         body.add("code", code);
 

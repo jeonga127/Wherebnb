@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+@RequestMapping("room")
 @RestController
 @RequiredArgsConstructor
 public class RoomsController {
@@ -22,21 +23,26 @@ public class RoomsController {
     private final RoomsService roomsService;
 
     // 숙소 등록
-    @PostMapping("/room")
+    @PostMapping
     public ResponseDto roomInsert(@RequestParam(value = "images", required = false) List<MultipartFile> images, RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
         return roomsService.roomInsert(roomRequestDto, userDetails.getUser(), images);
     }
 
     // 숙소 수정
-    @PutMapping("/room/{id}")
+    @PutMapping("/{id}")
     public ResponseDto roomUpdate(@PathVariable("id") Long id , @RequestParam(value = "images", required = false) List<MultipartFile> images, RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         return roomsService.roomUpdate(id, roomRequestDto, userDetails.getUser(), images);
     }
 
     // 숙소 삭제
-    @DeleteMapping("/room/{id}")
+    @DeleteMapping("/{id}")
     public ResponseDto roomDelete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return roomsService.roomDelete(id, userDetails.getUser());
+    }
+
+    @GetMapping("/like")
+    public ResponseDto getAllLikeRooms(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return roomsService.getAllLikeRooms(userDetails.getUser());
     }
 
     // 좋아요 등록
@@ -45,7 +51,7 @@ public class RoomsController {
         return roomsService.roomLikes(id, userDetails.getUser());
     }
 
-    @PostMapping("/test")
+    @PostMapping("/test") // 추후 삭제
     public ResponseDto forTest(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return roomsService.forTest(userDetails.getUser());
     }

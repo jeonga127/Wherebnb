@@ -24,7 +24,7 @@ public class HostResponseDto {
         this.price = room.getPrice();
         this.startDate = room.getStartDate();
         this.endDate = room.getEndDate();
-        this.createdAt = room.getCreatedDate();
+        this.createdAt = room.getCreatedAt();
         this.likeStatus = false;
     }
 
@@ -34,7 +34,7 @@ public class HostResponseDto {
         this.price = room.getPrice();
         this.startDate = room.getStartDate();
         this.endDate = room.getEndDate();
-        this.createdAt = room.getCreatedDate();
+        this.createdAt = room.getCreatedAt();
         this.likeStatus = likeStatus;
     }
 }

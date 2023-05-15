@@ -77,7 +77,6 @@ public class HostService {
         return ResponseDto.setSuccess("조건 검색 성공",roomsListByCondition);
     }
 
-
     public List<Rooms> ConditionCheck(HostRequestDto hostreqeuestdto, Pageable pageable){
         LocalDate startDateTime = hostreqeuestdto.getStartDate();
         LocalDate endDateTime = hostreqeuestdto.getEndDate();
@@ -98,6 +97,4 @@ public class HostService {
         }
         return rooms;
     }
-
-
 }

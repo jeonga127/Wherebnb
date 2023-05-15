@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Slf4j
 public class SentrySupport {
-
     public SentrySupport() {
         log.info("================================ SentrySupport init()");
         Sentry.init("https://ca8e476b98e0475cb81cc10a056c6b0d@o4505156849500160.ingest.sentry.io/4505156854284288");

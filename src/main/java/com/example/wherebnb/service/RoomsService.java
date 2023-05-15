@@ -46,29 +46,26 @@ public class RoomsService {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
-
     private final AmazonS3 amazonS3;
 
     // 숙소 등록
     public ResponseDto roomInsert(RoomsRequestDto roomsRequestDto, Users user, List<MultipartFile> images) throws IOException {
         Rooms rooms = Rooms.builder().roomsRequestDto(roomsRequestDto).user(user).build();
-        List<ImageFile> imageFileList = new ArrayList<>();
-        imageFileList = fileFactory(images, rooms, imageFileList);
-        rooms.setImageFile(imageFileList);
+        rooms.setImageFile(fileFactory(images, rooms));
         roomsRepository.save(rooms);
         return ResponseDto.setSuccess("숙소 등록을 완료하였습니다.", null);
     }
 
-
     // 숙소 수정
     public ResponseDto roomUpdate(Long id, RoomsRequestDto roomsRequestDto, Users user, List<MultipartFile> images) throws IOException {
-        List<ImageFile> imageFileList = new ArrayList<>();
         Rooms room = roomsRepository.findById(id).orElseThrow(  // 수정할 게시글 있는지 확인
                 () -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+
         if (!room.getUser().getId().equals(user.getId())) // 권한 체크
             return ResponseDto.setBadRequest("숙소 수정을 할 수 없습니다.", null);
+
         filesRepository.deleteByRoomId(id); // 해당되는 전체 이미지 삭제
-        room.setImageFile(fileFactory(images, room, imageFileList));
+        room.setImageFile(fileFactory(images, room));
         room.roomUpdate(roomsRequestDto); // 기본정보 업데이트
         return ResponseDto.setSuccess("숙소 수정을 완료하였습니다.", null);
     }
@@ -84,6 +81,11 @@ public class RoomsService {
         filesRepository.deleteByRoomId(id);
         roomsRepository.delete(room);
         return ResponseDto.setSuccess("숙소 삭제를 완료하였습니다.", null);
+    }
+
+    // 좋아요한 숙소 조회
+    public ResponseDto getAllLikeRooms(Users user) {
+        return null;
     }
 
     // 좋아요 등록
@@ -106,7 +108,8 @@ public class RoomsService {
     }
 
     // 파일 등록 팩토리
-    public List<ImageFile> fileFactory(List<MultipartFile> images, Rooms rooms, List<ImageFile> imageFileList) throws IOException {
+    public List<ImageFile> fileFactory(List<MultipartFile> images, Rooms rooms) throws IOException {
+        List<ImageFile> imageFileList = new ArrayList<>();
 
         for (MultipartFile image : images) {
             // 파일명 새로 부여를 위한 현재 시간 알아내기
@@ -117,7 +120,6 @@ public class RoomsService {
             int millis = now.get(ChronoField.MILLI_OF_SECOND);
 
             String imageUrl = null;
-
             String newFileName = "image" + hour + minute + second + millis;
             String fileExtension = '.' + image.getOriginalFilename().replaceAll("^.*\\.(.*)$", "$1");
             String imageName = S3_BUCKET_PREFIX + newFileName + fileExtension;
@@ -139,7 +141,7 @@ public class RoomsService {
     }
 
     public ResponseDto forTest(Users from) {
-        Users to = userRepository.findByUsername("정아").orElseThrow(()->new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+        Users to = userRepository.findByUsername(from.getUsername()).orElseThrow(()->new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
         log.info("from : " + from.getUsername() + "/ to : " + to.getUsername());
         notificationService.notifyMe(from, to);
         return ResponseDto.setSuccess("SSE 테스트용 코드!", null);
