@@ -71,4 +71,3 @@ public class HostController {
         return hostService.getRoomsByUserAndCondition(startDate, endDate, adults, children, infant, pet, flexibleTripLengths, userDetails.getUser());
     }
 }
-
