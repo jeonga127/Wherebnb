@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static com.example.wherebnb.controller.SseController.sseEmitters;
@@ -28,8 +30,13 @@ public class NotificationService {
             SseEmitter sseEmitter = sseEmitters.get(kakaoId);
             try{
                 log.info("notifyLike sseEmitters 활동중!");
+
                 sseEmitter.send(SseEmitter.event().name("notifyLike")
-                        .data(likes.getUser().getUsername() +"님이 내 " + likes.getRooms().getRoomName() + "을 즐겨찾기 하셨습니다."));
+                                .data("data : { \"username\": " + likes.getUser().getUsername() + ", "
+                                + "\"roomname\": " + likes.getRooms().getRoomName() + ", "
+                                + "\"createdAt\": " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM월 dd일 a HH시 mm분"))));
+
+                // writer.write("data: { \"message\" : \"number : "+ i + "\" }\n\n");
             } catch (Exception e) {
                 sseEmitters.remove(kakaoId);
             }

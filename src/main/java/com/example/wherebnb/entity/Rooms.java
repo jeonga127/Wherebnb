@@ -20,43 +20,43 @@ public class Rooms extends Timestamped{
     private Long id;
 
     @Column(nullable = false)
-    private String roomName; // 숙소 이름
+    private String roomName;
 
     @Column(nullable = false)
-    private String description; // 숙소 설명
+    private String description;
 
     @Column(nullable = false)
-    private String location; // 숙소 위치
+    private String location;
 
     @Column(nullable = false)
-    private String keyword1; // 키워드1
+    private String keyword1;
 
     @Column(nullable = false)
-    private String keyword2; // 키워드2
+    private String keyword2;
 
     @Column(nullable = false)
-    private int guestNum; //수용 인원
+    private int guestNum;
 
     @Column(nullable = false)
-    private int bedroomNum; // 침실 갯수
+    private int bedroomNum;
 
     @Column(nullable = false)
-    private int bathrooomNum; // 욕실 갯수
+    private int bathrooomNum;
 
     @Column(nullable = false)
-    private boolean infant; // 유아 동반 가능 여부
+    private boolean infant;
 
     @Column(nullable = false)
-    private boolean pet; // 애견 동반 가능 여부
+    private boolean pet;
 
     @Column(nullable = false)
-    private LocalDate checkInDate; // 시작 날짜
+    private LocalDate checkInDate;
 
     @Column(nullable = false)
-    private LocalDate checkOutDate; // 종료 날짜
+    private LocalDate checkOutDate;
 
     @Column(nullable = false)
-    private int price; // 가격
+    private int price;
 
     @Column(nullable = false)
     private int likesNum;
@@ -88,7 +88,6 @@ public class Rooms extends Timestamped{
         this.checkOutDate = roomsRequestDto.getCheckOutDate();
         this.price = roomsRequestDto.getPrice();
         this.user = user;
-        //startDate, endDate 사이 기간 계산하고 int로 형변환
         this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getCheckInDate(), roomsRequestDto.getCheckOutDate());
         this.likesNum = 0;
     }
@@ -108,7 +107,6 @@ public class Rooms extends Timestamped{
         this.checkInDate = roomsRequestDto.getCheckInDate();
         this.checkOutDate = roomsRequestDto.getCheckOutDate();
         this.price = roomsRequestDto.getPrice();
-        //startDate, endDate 사이 기간 계산하고 int로 형변환
         this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getCheckInDate(), roomsRequestDto.getCheckOutDate());
     }
 

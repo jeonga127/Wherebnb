@@ -19,19 +19,16 @@ public class RoomsController {
 
     private final RoomsService roomsService;
 
-    // 숙소 등록
     @PostMapping
     public ResponseDto roomInsert(@RequestParam(value = "images", required = false) List<MultipartFile> images, RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
         return roomsService.roomInsert(roomRequestDto, userDetails.getUser(), images);
     }
 
-    // 숙소 수정
     @PutMapping("/{id}")
     public ResponseDto roomUpdate(@PathVariable("id") Long id , @RequestParam(value = "images", required = false) List<MultipartFile> images, RoomsRequestDto roomRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         return roomsService.roomUpdate(id, roomRequestDto, userDetails.getUser(), images);
     }
 
-    // 숙소 삭제
     @DeleteMapping("/{id}")
     public ResponseDto roomDelete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return roomsService.roomDelete(id, userDetails.getUser());
@@ -42,7 +39,6 @@ public class RoomsController {
         return roomsService.getAllLikeRooms(userDetails.getUser());
     }
 
-    // 좋아요 등록
     @PutMapping("/like/{id}")
     public ResponseDto roomLikes(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return roomsService.roomLikes(id, userDetails.getUser());

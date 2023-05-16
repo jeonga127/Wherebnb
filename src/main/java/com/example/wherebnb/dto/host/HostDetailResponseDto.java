@@ -1,5 +1,6 @@
 package com.example.wherebnb.dto.host;
 
+import com.example.wherebnb.entity.ImageFile;
 import com.example.wherebnb.entity.Rooms;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,13 +9,16 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class HostDetailResponseDto {
-    private String imageurl; // 이미지 url
+    private Long roomId;
+    private List<ImageFile> imageurl; // 이미지 url
     private String roomName; //숙소이름
     private String description; // 숙소설명
     private String keyword1; // 키워드1
@@ -29,12 +33,13 @@ public class HostDetailResponseDto {
     private int price; // 가격
     private LocalDate checkInDate; // 시작날짜
     private LocalDate checkOutDate; // 종료날짜
-    private LocalDateTime createdAt; // 등록일
+    private String createdAt; // 등록일
     private int likesNum;
 
     public HostDetailResponseDto toHostResponseDto(Rooms room) {
         return HostDetailResponseDto.builder()
-                .imageurl("imageurl")
+                .roomId(room.getId())
+                .imageurl(room.getImageFile())
                 .roomName(room.getRoomName())
                 .description(room.getDescription())
                 .keyword1(room.getKeyword1())
@@ -48,7 +53,7 @@ public class HostDetailResponseDto {
                 .price(room.getPrice())
                 .checkInDate(room.getCheckInDate())
                 .checkOutDate(room.getCheckOutDate())
-                .createdAt(room.getCreatedAt())
+                .createdAt(room.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")))
                 .likesNum(room.getLikesNum())
                 .build();
     }
