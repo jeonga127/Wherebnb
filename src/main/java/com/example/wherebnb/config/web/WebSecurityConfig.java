@@ -1,4 +1,4 @@
-package com.example.wherebnb.config;
+package com.example.wherebnb.config.web;
 
 import com.example.wherebnb.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;

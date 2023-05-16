@@ -1,4 +1,4 @@
-package com.example.wherebnb.config;
+package com.example.wherebnb.config.global;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

@@ -1,6 +1,6 @@
 package com.example.wherebnb.entity;
 
-import com.example.wherebnb.dto.RoomsRequestDto;
+import com.example.wherebnb.dto.room.RoomsRequestDto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Builder;

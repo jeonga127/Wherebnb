@@ -1,4 +1,4 @@
-package com.example.wherebnb.dto;
+package com.example.wherebnb.dto.room;
 
 import lombok.*;
 

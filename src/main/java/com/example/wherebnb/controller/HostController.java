@@ -1,6 +1,6 @@
 package com.example.wherebnb.controller;
 
-import com.example.wherebnb.dto.HostRequestDto;
+import com.example.wherebnb.dto.host.HostRequestDto;
 import com.example.wherebnb.dto.ResponseDto;
 import com.example.wherebnb.service.HostService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,6 @@ public class HostController {
     public ResponseDto getAllRooms(Pageable pageable){
         return hostService.getAllRooms(pageable);
     }
-
 
     // 숙소 상세 조회 (비회원)
     @GetMapping("/{id}")
