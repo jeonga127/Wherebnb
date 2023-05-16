@@ -88,7 +88,6 @@ public class HostService {
             rooms = roomsRepository.findByCheckInDateGreaterThanEqualAndCheckOutDateGreaterThanEqual(checkInDate, checkOutDate, pageable);
 
         }
-
         rooms.retainAll (roomsRepository.findByGuestNumGreaterThanEqualAndInfantAndPet(guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable));
         return rooms;
     }
