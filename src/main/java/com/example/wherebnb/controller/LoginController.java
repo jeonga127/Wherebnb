@@ -16,7 +16,7 @@ public class LoginController {
     private final UserService userService;
 
     @GetMapping("/login")
-    public ResponseDto kakaoLogin(@RequestParam("code") String code, HttpServletResponse response) throws JsonProcessingException {
+    public ResponseDto<String> kakaoLogin(@RequestParam("code") String code, HttpServletResponse response) throws JsonProcessingException {
         return userService.kakaoLogin(code, response);
     }
 }
