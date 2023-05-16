@@ -14,23 +14,23 @@ public class ImageFile {
     private Long id;
 
     @Column(nullable = false)
-    private String imageurl; // 이미지url
+    private String imageUrl;
 
     @Column(nullable = false)
-    private String originfilename;  // 파일 원래 이름
+    private String originFileName;
 
     @Column(nullable = false)
-    private String filename;  // db에 저장될 파일이름
+    private String fileName;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)
     private Rooms room;
 
-    public ImageFile(String imageurl, String originfilename, String filename, Rooms room){
-        this.imageurl = imageurl;
-        this.originfilename = originfilename;
-        this.filename = filename;
+    public ImageFile(String imageUrl, String originFileName, String fileName, Rooms room){
+        this.imageUrl = imageUrl;
+        this.originFileName = originFileName;
+        this.fileName = fileName;
         this.room = room;
     }
 }

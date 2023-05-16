@@ -27,7 +27,6 @@ public class HostService {
     private final RoomsRepository roomsRepository;
     private final LikesRepository likesRepository;
 
-    // 숙소 전체 검색
     public ResponseDto<List<HostResponseDto>> getAllRooms(Pageable pageable) {
         List<HostResponseDto> roomList = roomsRepository.findAll(pageable).getContent()
                 .stream().map(HostResponseDto::new).collect(Collectors.toList());
@@ -41,20 +40,17 @@ public class HostService {
         return ResponseDto.setSuccess("전체 조회 성공", roomList);
     }
 
-    // 숙소 상세조회
     public ResponseDto<HostDetailResponseDto> getRoomDetail(Long id) {
         Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
         HostDetailResponseDto hostDetailResponseDto = new HostDetailResponseDto().toHostResponseDto(room);
         return ResponseDto.setSuccess("상세 조회 성공", hostDetailResponseDto);
     }
 
-    // 숙소 키워드 검색 (비회원)
     public ResponseDto<List<HostResponseDto>> chooseSearch(String keyword1, String keyword2, Pageable pageable){
         List<HostResponseDto> roomList =  roomsRepository.findAllByKeyword1OrKeyword2(keyword1, keyword2, pageable).stream().map(HostResponseDto::new).collect(Collectors.toList());
         return ResponseDto.setSuccess("키워드 검색 성공", roomList);
     }
 
-    // 숙소 키워드 검색 (회원)
     public ResponseDto<List<HostResponseDto>> chooseUsersSearch(String keyword1, String keyword2, Users user, Pageable pageable) {
         List<HostResponseDto> roomList = roomsRepository.findAllByKeyword1OrKeyword2(keyword1, keyword2, pageable).stream()
                 .map(x->new HostResponseDto(x, likesRepository.existsByUserIdAndRoomsId(user.getId(), x.getId())))
@@ -62,7 +58,6 @@ public class HostService {
         return ResponseDto.setSuccess("키워드 검색 성공", roomList);
     }
 
-    //숙소 조건검색 (비회원)
     public ResponseDto<List<HostResponseDto>> getRoomsByCondition(HostRequestDto hostreqeuestdto, Pageable pageable) {
         List<HostResponseDto> roomsListByCondition = ConditionCheck(hostreqeuestdto, pageable).stream().map(HostResponseDto::new).collect(Collectors.toList());
         return ResponseDto.setSuccess("조건 검색 성공",roomsListByCondition);

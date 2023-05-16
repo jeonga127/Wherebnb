@@ -47,10 +47,12 @@ public class UserService {
         String token = jwtUtil.createToken(userInfoDto.getKakaoId().toString());
 
         Cookie cookie = new Cookie("Authorization", token.substring(7));
+        cookie.setMaxAge(Integer.MAX_VALUE);
         cookie.setPath("/");
         response.addCookie(cookie);
         return ResponseDto.setSuccess("로그인 성공", userInfoDto.getUsername());
     }
+
     private String getToken(String code) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
