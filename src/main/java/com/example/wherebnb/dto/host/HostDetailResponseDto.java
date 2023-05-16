@@ -26,7 +26,7 @@ public class HostDetailResponseDto {
     private int guestNum; // 수용 인원
     private int bedroomNum; // 침실 갯수
     private int bedNum; // 침대 갯수
-    private int bathrooomNum; //욕실 갯수
+    private int bathroomNum; //욕실 갯수
     private boolean infant; // 유아 동반 가능 여부
     private boolean pet; // 애견 동반 가능 여부
     private String location; // 숙소위치
@@ -46,7 +46,7 @@ public class HostDetailResponseDto {
                 .keyword2(room.getKeyword2())
                 .guestNum(room.getGuestNum())
                 .bedroomNum(room.getBedroomNum())
-                .bathrooomNum(room.getBathrooomNum())
+                .bathroomNum(room.getBathroomNum())
                 .infant(room.isInfant())
                 .pet(room.isPet())
                 .location(room.getLocation())

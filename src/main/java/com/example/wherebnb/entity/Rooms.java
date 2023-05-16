@@ -41,7 +41,7 @@ public class Rooms extends Timestamped{
     private int bedroomNum;
 
     @Column(nullable = false)
-    private int bathrooomNum;
+    private int bathroomNum; // 욕실 갯수
 
     @Column(nullable = false)
     private boolean infant;
@@ -81,7 +81,7 @@ public class Rooms extends Timestamped{
         this.keyword2 = roomsRequestDto.getKeyword2();
         this.guestNum = roomsRequestDto.getGuestNum();
         this.bedroomNum = roomsRequestDto.getBedroomNum();
-        this.bathrooomNum = roomsRequestDto.getBathrooomNum();
+        this.bathroomNum = roomsRequestDto.getBathroomNum();
         this.infant = roomsRequestDto.isInfant();
         this.pet = roomsRequestDto.isPet();
         this.checkInDate = roomsRequestDto.getCheckInDate();
@@ -101,7 +101,7 @@ public class Rooms extends Timestamped{
         this.keyword2 = roomsRequestDto.getKeyword2();
         this.guestNum = roomsRequestDto.getGuestNum();
         this.bedroomNum = roomsRequestDto.getBedroomNum();
-        this.bathrooomNum = roomsRequestDto.getBathrooomNum();
+        this.bathroomNum = roomsRequestDto.getBathroomNum();
         this.infant = roomsRequestDto.isInfant();
         this.pet = roomsRequestDto.isPet();
         this.checkInDate = roomsRequestDto.getCheckInDate();

@@ -83,10 +83,12 @@ public class HostService {
             } else {
                 throw new ApiException(ExceptionEnum.NOT_FOUND_CONDITION);
             }
-            rooms = roomsRepository.findAllByPeriodGreaterThanEqualAndCheckInDateGreaterThanEqualAndCheckOutDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(period, checkInDate, checkOutDate, guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable);
+            rooms = roomsRepository.findAllByPeriodGreaterThanEqual(period, pageable);
         } else {
-            rooms = roomsRepository.findAllByCheckInDateGreaterThanEqualAndCheckOutDateLessThanEqualAndGuestNumGreaterThanEqualAndInfantAndPet(checkInDate, checkOutDate, guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable);
+            rooms = roomsRepository.findByCheckInDateGreaterThanEqualAndCheckOutDateGreaterThanEqual(checkInDate, checkOutDate, pageable);
+
         }
+        rooms.retainAll (roomsRepository.findByGuestNumGreaterThanEqualAndInfantAndPet(guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable));
         return rooms;
     }
 }
