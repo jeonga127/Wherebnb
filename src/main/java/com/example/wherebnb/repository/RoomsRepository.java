@@ -13,7 +13,7 @@ public interface RoomsRepository extends JpaRepository<Rooms, Long> {
 
    List<Rooms> findAllByKeyword1OrKeyword2(String keyword1, String keyword2, Pageable pageable);
 
-   List<Rooms> findByCheckInDateGreaterThanEqualAndCheckOutDateGreaterThanEqual(
+   List<Rooms> findByCheckInDateLessThanEqualAndCheckOutDateGreaterThanEqual(
            LocalDate checkInDate,
            LocalDate checkOutDate,
            Pageable pageable);

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -44,10 +45,10 @@ public class Rooms extends Timestamped{
     private int bathroomNum; // 욕실 갯수
 
     @Column(nullable = false)
-    private boolean infant;
+    private boolean infantExist;
 
     @Column(nullable = false)
-    private boolean pet;
+    private boolean petExist;
 
     @Column(nullable = false)
     private LocalDate checkInDate;
@@ -82,13 +83,13 @@ public class Rooms extends Timestamped{
         this.guestNum = roomsRequestDto.getGuestNum();
         this.bedroomNum = roomsRequestDto.getBedroomNum();
         this.bathroomNum = roomsRequestDto.getBathroomNum();
-        this.infant = roomsRequestDto.isInfant();
-        this.pet = roomsRequestDto.isPet();
-        this.checkInDate = roomsRequestDto.getCheckInDate();
-        this.checkOutDate = roomsRequestDto.getCheckOutDate();
+        this.infantExist = roomsRequestDto.isInfantExist();
+        this.petExist = roomsRequestDto.isPetExist();
+        this.checkInDate = LocalDate.parse(roomsRequestDto.getCheckInDate(), DateTimeFormatter.ISO_DATE);
+        this.checkOutDate = LocalDate.parse(roomsRequestDto.getCheckOutDate(), DateTimeFormatter.ISO_DATE);;
         this.price = roomsRequestDto.getPrice();
         this.user = user;
-        this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getCheckInDate(), roomsRequestDto.getCheckOutDate());
+        this.period = (int) ChronoUnit.DAYS.between(checkInDate, checkOutDate);
         this.likesNum = 0;
     }
 
@@ -102,12 +103,12 @@ public class Rooms extends Timestamped{
         this.guestNum = roomsRequestDto.getGuestNum();
         this.bedroomNum = roomsRequestDto.getBedroomNum();
         this.bathroomNum = roomsRequestDto.getBathroomNum();
-        this.infant = roomsRequestDto.isInfant();
-        this.pet = roomsRequestDto.isPet();
-        this.checkInDate = roomsRequestDto.getCheckInDate();
-        this.checkOutDate = roomsRequestDto.getCheckOutDate();
+        this.infantExist = roomsRequestDto.isInfantExist();
+        this.petExist = roomsRequestDto.isPetExist();
+        this.checkInDate = LocalDate.parse(roomsRequestDto.getCheckInDate(), DateTimeFormatter.ISO_DATE);
+        this.checkOutDate = LocalDate.parse(roomsRequestDto.getCheckOutDate(), DateTimeFormatter.ISO_DATE);;
         this.price = roomsRequestDto.getPrice();
-        this.period = (int) ChronoUnit.DAYS.between(roomsRequestDto.getCheckInDate(), roomsRequestDto.getCheckOutDate());
+        this.period = (int) ChronoUnit.DAYS.between(checkInDate, checkOutDate);
     }
 
     public void setImageFile(List<ImageFile> imageFile){

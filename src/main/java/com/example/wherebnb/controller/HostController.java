@@ -33,7 +33,7 @@ public class HostController {
     }
 
     @GetMapping("/condition")
-    public ResponseDto getMainRoomBycondition(HostRequestDto hostreqeuestdto, Pageable pageable){
+    public ResponseDto getMainRoomByCondition(HostRequestDto hostreqeuestdto, Pageable pageable){
         return hostService.getRoomsByCondition(hostreqeuestdto, pageable);
     }
 }

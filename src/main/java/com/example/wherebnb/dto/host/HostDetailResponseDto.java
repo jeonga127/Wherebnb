@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -47,8 +46,8 @@ public class HostDetailResponseDto {
                 .guestNum(room.getGuestNum())
                 .bedroomNum(room.getBedroomNum())
                 .bathroomNum(room.getBathroomNum())
-                .infant(room.isInfant())
-                .pet(room.isPet())
+                .infantExist(room.isInfantExist())
+                .petExist(room.isPetExist())
                 .location(room.getLocation())
                 .price(room.getPrice())
                 .checkInDate(room.getCheckInDate())
