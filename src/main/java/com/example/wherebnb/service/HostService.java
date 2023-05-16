@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,9 +71,9 @@ public class HostService {
     }
 
     public List<Rooms> ConditionCheck(HostRequestDto hostreqeuestdto, Pageable pageable){
-        LocalDate checkInDate = hostreqeuestdto.getCheckInDate();
-        LocalDate checkOutDate = hostreqeuestdto.getCheckOutDate();
-        int guestNum = hostreqeuestdto.getAdults() + hostreqeuestdto.getChildren();
+        LocalDate checkInDate = LocalDate.parse(hostreqeuestdto.getCheckInDate(),  DateTimeFormatter.ISO_DATE);
+        LocalDate checkOutDate = LocalDate.parse(hostreqeuestdto.getCheckOutDate(), DateTimeFormatter.ISO_DATE);
+        int guestNum = hostreqeuestdto.getAdultsNum() + hostreqeuestdto.getChildrenNum();
         List<Rooms> rooms;
         int period = 0;
         if (!"not_flexible".equals(hostreqeuestdto.getFlexibleTripLengths())) {
@@ -85,10 +86,10 @@ public class HostService {
             }
             rooms = roomsRepository.findAllByPeriodGreaterThanEqual(period, pageable);
         } else {
-            rooms = roomsRepository.findByCheckInDateGreaterThanEqualAndCheckOutDateGreaterThanEqual(checkInDate, checkOutDate, pageable);
+            rooms = roomsRepository.findByCheckInDateLessThanEqualAndCheckOutDateGreaterThanEqual(checkInDate, checkOutDate, pageable);
 
         }
-        rooms.retainAll (roomsRepository.findByGuestNumGreaterThanEqualAndInfantAndPet(guestNum, hostreqeuestdto.isInfant(), hostreqeuestdto.isPet(), pageable));
+        rooms.retainAll (roomsRepository.findByGuestNumLessThanEqualAndInfantExistAndPetExist(guestNum, hostreqeuestdto.isInfantExist(), hostreqeuestdto.isPetExist(), pageable));
         return rooms;
     }
 }

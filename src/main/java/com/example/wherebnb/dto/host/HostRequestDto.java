@@ -12,11 +12,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HostRequestDto {
-    private LocalDate checkInDate; // 체크인 날짜
-    private LocalDate checkOutDate;// 체크아웃 날짜
-    private int adults; // 성인숫자
-    private int children; // 어린이숫자
-    private boolean infant; // 유아 동반 여부
-    private boolean pet; // 반려 동물 동반 여부
-    private String flexibleTripLengths; // 유여한 일정
+    private String checkInDate;
+    private String checkOutDate;
+    private int adultsNum;
+    private int childrenNum;
+    private boolean infantExist;
+    private boolean petExist;
+    private String flexibleTripLengths;
 }
