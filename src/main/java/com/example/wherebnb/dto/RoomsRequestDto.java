@@ -1,8 +1,9 @@
-package com.example.wherebnb.dto.room;
+package com.example.wherebnb.dto;
 
-import lombok.*;
-
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Getter
@@ -14,6 +15,7 @@ public class RoomsRequestDto {
     private String description;
     private int guestNum;
     private int bedroomNum;
+    private int bedNum;
     private int bathroomNum;
     private boolean infantExist;
     private boolean petExist;

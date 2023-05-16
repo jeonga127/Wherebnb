@@ -6,7 +6,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.wherebnb.dto.ResponseDto;
 import com.example.wherebnb.dto.host.HostResponseDto;
-import com.example.wherebnb.dto.room.RoomsRequestDto;
+import com.example.wherebnb.dto.RoomsRequestDto;
 import com.example.wherebnb.entity.ImageFile;
 import com.example.wherebnb.entity.Likes;
 import com.example.wherebnb.entity.Rooms;

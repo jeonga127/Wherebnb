@@ -1,7 +1,7 @@
 package com.example.wherebnb.controller;
 
 import com.example.wherebnb.dto.ResponseDto;
-import com.example.wherebnb.dto.room.RoomsRequestDto;
+import com.example.wherebnb.dto.RoomsRequestDto;
 import com.example.wherebnb.security.UserDetailsImpl;
 import com.example.wherebnb.service.RoomsService;
 import lombok.RequiredArgsConstructor;

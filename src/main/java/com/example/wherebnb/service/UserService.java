@@ -46,6 +46,8 @@ public class UserService {
         //4. JWT 토큰 반환
         String token = jwtUtil.createToken(userInfoDto.getKakaoId().toString());
 
+        response.addHeader("Authorization", token);
+
         Cookie cookie = new Cookie("Authorization", token.substring(7));
         cookie.setMaxAge(Integer.MAX_VALUE);
         cookie.setPath("/");

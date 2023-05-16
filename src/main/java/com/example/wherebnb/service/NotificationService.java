@@ -32,8 +32,8 @@ public class NotificationService {
                 log.info("notifyLike sseEmitters 활동중!");
 
                 sseEmitter.send(SseEmitter.event().name("notifyLike")
-                                .data("data : { \"username\": " + likes.getUser().getUsername() + ", "
-                                + "\"roomname\": " + likes.getRooms().getRoomName() + ", "
+                                .data("data : { \"userName\": " + likes.getUser().getUsername() + ", "
+                                + "\"roomName\": " + likes.getRooms().getRoomName() + ", "
                                 + "\"createdAt\": " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM월 dd일 a HH시 mm분"))));
 
                 // writer.write("data: { \"message\" : \"number : "+ i + "\" }\n\n");

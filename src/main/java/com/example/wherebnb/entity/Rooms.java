@@ -1,6 +1,6 @@
 package com.example.wherebnb.entity;
 
-import com.example.wherebnb.dto.room.RoomsRequestDto;
+import com.example.wherebnb.dto.RoomsRequestDto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -37,6 +37,9 @@ public class Rooms extends Timestamped{
 
     @Column(nullable = false)
     private int guestNum;
+
+    @Column(nullable = false)
+    private int bedNum;
 
     @Column(nullable = false)
     private int bedroomNum;
@@ -82,6 +85,7 @@ public class Rooms extends Timestamped{
         this.keyword2 = roomsRequestDto.getKeyword2();
         this.guestNum = roomsRequestDto.getGuestNum();
         this.bedroomNum = roomsRequestDto.getBedroomNum();
+        this.bedNum = roomsRequestDto.getBedNum();
         this.bathroomNum = roomsRequestDto.getBathroomNum();
         this.infantExist = roomsRequestDto.isInfantExist();
         this.petExist = roomsRequestDto.isPetExist();
@@ -102,6 +106,7 @@ public class Rooms extends Timestamped{
         this.keyword2 = roomsRequestDto.getKeyword2();
         this.guestNum = roomsRequestDto.getGuestNum();
         this.bedroomNum = roomsRequestDto.getBedroomNum();
+        this.bedNum = roomsRequestDto.getBedNum();
         this.bathroomNum = roomsRequestDto.getBathroomNum();
         this.infantExist = roomsRequestDto.isInfantExist();
         this.petExist = roomsRequestDto.isPetExist();
