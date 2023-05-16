@@ -18,7 +18,7 @@ public class Likes {
     private Users user;
 
     @ManyToOne
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "rooms_id", nullable = false)
     private Rooms rooms;
 
     public Likes(Rooms room, Users user){

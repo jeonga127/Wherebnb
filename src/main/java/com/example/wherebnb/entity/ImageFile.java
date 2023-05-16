@@ -24,7 +24,7 @@ public class ImageFile {
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "rooms_id", nullable = false)
     private Rooms room;
 
     public ImageFile(String imageUrl, String originFileName, String fileName, Rooms room){
