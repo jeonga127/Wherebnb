@@ -2,7 +2,6 @@ package com.example.wherebnb.service;
 
 import com.example.wherebnb.entity.Likes;
 import com.example.wherebnb.entity.Users;
-import com.example.wherebnb.repository.LikesRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,7 @@ public class NotificationService {
 
                 sseEmitter.send(SseEmitter.event().name("notifyLike")
                                 .data("data : { \"username\": " + likes.getUser().getUsername() + ", "
-                                + "\"roomname\": " + likes.getRooms().getRoomName() + ", "
+                                + "\"roomname\": " + likes.getRoomsInfo().getRoomName() + ", "
                                 + "\"createdAt\": " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM월 dd일 a HH시 mm분"))));
 
                 // writer.write("data: { \"message\" : \"number : "+ i + "\" }\n\n");

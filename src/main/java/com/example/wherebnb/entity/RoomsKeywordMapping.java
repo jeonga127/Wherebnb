@@ -4,25 +4,24 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Entity
+@Getter
 @NoArgsConstructor
-public class Likes {
+public class RoomsKeywordMapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "likes_id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
+    @JoinColumn(name = "keyword_id", nullable = false)
+    private Keyword keyword;
 
     @ManyToOne
     @JoinColumn(name = "rooms_id", nullable = false)
-    private RoomsInfo roomsInfo;
+    private Rooms rooms;
 
-    public Likes(RoomsInfo roomsInfo, Users user){
-        this.roomsInfo = roomsInfo;
-        this.user = user;
+    public RoomsKeywordMapping(Keyword keyword, Rooms rooms){
+        this.keyword = keyword;
+        this.rooms = rooms;
     }
 }

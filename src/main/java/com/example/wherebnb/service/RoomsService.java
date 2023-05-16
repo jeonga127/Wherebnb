@@ -7,16 +7,10 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.wherebnb.dto.ResponseDto;
 import com.example.wherebnb.dto.host.HostResponseDto;
 import com.example.wherebnb.dto.room.RoomsRequestDto;
-import com.example.wherebnb.entity.ImageFile;
-import com.example.wherebnb.entity.Likes;
-import com.example.wherebnb.entity.Rooms;
-import com.example.wherebnb.entity.Users;
+import com.example.wherebnb.entity.*;
 import com.example.wherebnb.exception.ApiException;
 import com.example.wherebnb.exception.ExceptionEnum;
-import com.example.wherebnb.repository.FilesRepository;
-import com.example.wherebnb.repository.LikesRepository;
-import com.example.wherebnb.repository.RoomsRepository;
-import com.example.wherebnb.repository.UserRepository;
+import com.example.wherebnb.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,44 +33,59 @@ import java.util.stream.Collectors;
 public class RoomsService {
 
     private final RoomsRepository roomsRepository;
+    private final RoomsInfoRepository roomsInfoRepository;
     private final LikesRepository likesRepository;
     private final NotificationService notificationService;
     private final FilesRepository filesRepository;
     private final UserRepository userRepository;
+    private final RoomsKeywordMappingRepository roomsKeywordMappingRepository;
 
     private static final String S3_BUCKET_PREFIX = "S3";
 
-//    @Value("${cloud.aws.s3.bucket}")
     @Value(("${cloud.aws.s3.bucket}"))
     private String bucketName;
     private final AmazonS3 amazonS3;
 
-    // 숙소 등록
     public ResponseDto<?> roomInsert(RoomsRequestDto roomsRequestDto, Users user, List<MultipartFile> images) throws IOException {
         Rooms rooms = Rooms.builder().roomsRequestDto(roomsRequestDto).user(user).build();
+        RoomsInfo roomsInfo = RoomsInfo.builder().roomsRequestDto(roomsRequestDto).rooms(rooms).build();
+
         rooms.setImageFile(fileFactory(images, rooms));
+        roomsInfo.setPeriod(rooms.getCheckInDate(), rooms.getCheckOutDate());
+
+        roomsKeywordMappingRepository.save(new RoomsKeywordMapping(new Keyword(roomsRequestDto.getKeyword1()), rooms));
+        if(roomsRequestDto.getKeyword2().equals("null"))
+            roomsKeywordMappingRepository.save(new RoomsKeywordMapping(new Keyword(roomsRequestDto.getKeyword2()), rooms));
+
         roomsRepository.save(rooms);
+        roomsInfoRepository.save(roomsInfo);
         return ResponseDto.setSuccess("숙소 등록을 완료하였습니다.", null);
     }
 
-    // 숙소 수정
     public ResponseDto<?> roomUpdate(Long id, RoomsRequestDto roomsRequestDto, Users user, List<MultipartFile> images) throws IOException {
-        Rooms room = roomsRepository.findById(id).orElseThrow(  // 수정할 게시글 있는지 확인
-                () -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+        Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
 
-        if (!room.getUser().getId().equals(user.getId())) // 권한 체크
+        if (!room.getUser().getId().equals(user.getId()))
             return ResponseDto.setBadRequest("숙소 수정을 할 수 없습니다.", null);
 
-        filesRepository.deleteByRoomId(id); // 해당되는 전체 이미지 삭제
+        RoomsInfo roomsInfo = roomsInfoRepository.findByRoomId(room.getId()).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+//
+//        RoomsKeywordMapping roomsKeywordMapping = new RoomsKeywordMapping(new Keyword(roomsRequestDto.getKeyword1()), rooms));
+//        if(roomsRequestDto.getKeyword2().equals("null"))
+//            roomsKeywordMappingRepository.save(new RoomsKeywordMapping(new Keyword(roomsRequestDto.getKeyword2()), rooms));
+//
+//        List<RoomsKeywordMapping> roomsKeywordMappingList = roomsKeywordMappingRepository.findByRoomsId(room.getId()).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+//        roomsKeywordMappingList =
+
+        filesRepository.deleteByRoomId(id);
         room.setImageFile(fileFactory(images, room));
-        room.roomUpdate(roomsRequestDto); // 기본정보 업데이트
+        room.roomsUpdate(roomsRequestDto);
+        roomsInfo.roomsInfoUpdate(roomsRequestDto);
         return ResponseDto.setSuccess("숙소 수정을 완료하였습니다.", null);
     }
 
-    // 숙소 삭제
     public ResponseDto<?> roomDelete(Long id, Users user) {
-        Rooms room = roomsRepository.findById(id).orElseThrow( // 삭제할 게시글 있는지 확인
-                () -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+        Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
 
         if (!room.getUser().getId().equals(user.getId()))
             return ResponseDto.setBadRequest("숙소 삭제를 할 수 없습니다.", null);
@@ -86,39 +95,35 @@ public class RoomsService {
         return ResponseDto.setSuccess("숙소 삭제를 완료하였습니다.", null);
     }
 
-    // 좋아요한 숙소 조회
     @Transactional(readOnly = true)
     public ResponseDto<List<HostResponseDto>> getAllLikeRooms(Users user) {
         List<HostResponseDto> likeRoomsList = likesRepository.findAllByUserId(user.getId()).stream()
-                .map(x->new HostResponseDto(x.getRooms())).collect(Collectors.toList());
+                .map(x->new HostResponseDto(x.getRoomsInfo().getRooms())).collect(Collectors.toList());
         return ResponseDto.setSuccess("좋아요한 숙소 조회를 완료하였습니다.", likeRoomsList);
     }
 
-    // 좋아요 등록
     public ResponseDto<Boolean> roomLikes(Long id, Users from) {
-        Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+        RoomsInfo roomsInfo = roomsInfoRepository.findByRoomId(id).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
         boolean likeStatus = true;
 
-        if (likesRepository.existsByUserIdAndRoomsId(from.getId(), room.getId())) { // 이미 좋아요한 경우 취소
-            Likes likes = likesRepository.findByUserIdAndRoomsId(from.getId(), room.getId());
+        if (likesRepository.existsByUserIdAndRoomsId(from.getId(), roomsInfo.getRooms().getId())) {
+            Likes likes = likesRepository.findByUserIdAndRoomsId(from.getId(), roomsInfo.getRooms().getId());
             likesRepository.delete(likes);
             likeStatus = false;
-        } else { // 좋아요
-            Likes likes = new Likes(room, from);
+        } else {
+            Likes likes = new Likes(roomsInfo, from);
             likesRepository.save(likes);
-            notificationService.notifyLikeEvent(likes, room.getUser()); // 좋아요 알림 보내기
+            notificationService.notifyLikeEvent(likes, roomsInfo.getRooms().getUser()); // 좋아요 알림 보내기
         }
 
-        room.updateLikes(likeStatus);
+        roomsInfo.updateLikes(likeStatus);
         return ResponseDto.setSuccess("좋아요를 눌렀습니다.", likeStatus);
     }
 
-    // 파일 등록 팩토리
     public List<ImageFile> fileFactory(List<MultipartFile> images, Rooms rooms) throws IOException {
         List<ImageFile> imageFileList = new ArrayList<>();
 
         for (MultipartFile image : images) {
-            // 파일명 새로 부여를 위한 현재 시간 알아내기
             LocalDateTime now = LocalDateTime.now();
             int hour = now.getHour();
             int minute = now.getMinute();
@@ -127,10 +132,10 @@ public class RoomsService {
 
             String imageUrl = null;
             String newFileName = "image" + hour + minute + second + millis;
+            // substring으로 개선하기
             String fileExtension = '.' + image.getOriginalFilename().replaceAll("^.*\\.(.*)$", "$1");
             String imageName = S3_BUCKET_PREFIX + newFileName + fileExtension;
 
-            // 메타데이터 설정
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(image.getContentType());
             objectMetadata.setContentLength(image.getSize());
