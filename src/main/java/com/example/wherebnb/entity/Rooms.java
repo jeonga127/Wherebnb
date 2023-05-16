@@ -42,7 +42,7 @@ public class Rooms extends Timestamped{
     private int bedroomNum;
 
     @Column(nullable = false)
-    private int bathroomNum; // 욕실 갯수
+    private int bathroomNum;
 
     @Column(nullable = false)
     private boolean infantExist;
