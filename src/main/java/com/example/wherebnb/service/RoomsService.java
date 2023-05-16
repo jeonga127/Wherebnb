@@ -44,7 +44,8 @@ public class RoomsService {
 
     private static final String S3_BUCKET_PREFIX = "S3";
 
-    @Value("${cloud.aws.s3.bucket}")
+//    @Value("${cloud.aws.s3.bucket}")
+    @Value(("${cloud.aws.s3.bucket}"))
     private String bucketName;
     private final AmazonS3 amazonS3;
 
