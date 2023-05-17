@@ -18,6 +18,7 @@ public class Users {
 
     @Column(nullable = false)
     private String username;
+
     public Users(UserInfoDto userInfoDto) {
         this.username = userInfoDto.getUsername();
         this.kakaoId = userInfoDto.getKakaoId().toString();

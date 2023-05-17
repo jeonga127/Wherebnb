@@ -22,6 +22,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Value;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -33,17 +34,15 @@ public class UserService {
     private final JwtUtil jwtUtil;
 
     public ResponseDto<String> kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
-        //1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getToken(code);
 
-        //2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
         UserInfoDto userInfoDto = getUserInfo(accessToken);
+        log.info("ㅠㅅㅠ?????????????????????");
 
-        //3. user repository에 user가 있는지 확인 / 없다면 넣음
-        if(!userRepository.existsByKakaoId(userInfoDto.getKakaoId().toString()))
+        if(!userRepository.existsByKakaoId(userInfoDto.getKakaoId().toString())) {
+            log.info("ㅇㅅㅇ?????????????????????????????????????????????");
             userRepository.save(new Users(userInfoDto));
-
-        //4. JWT 토큰 반환
+        }
         String token = jwtUtil.createToken(userInfoDto.getKakaoId().toString());
 
         response.addHeader("Authorization", token);
