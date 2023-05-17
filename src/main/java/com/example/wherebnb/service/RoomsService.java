@@ -64,7 +64,7 @@ public class RoomsService {
     // 숙소 수정
     public ResponseDto<?> roomUpdate(Long id, RoomsRequestDto roomsRequestDto, Users user, List<MultipartFile> images) throws IOException {
         Rooms room = roomsRepository.findById(id).orElseThrow(  // 수정할 게시글 있는지 확인
-                () -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+                () -> new ErrorException(ExceptionEnum.ROOM_NOT_FOUND));
 
         if (!room.getUser().getId().equals(user.getId())) // 권한 체크
             throw  new ErrorException(ExceptionEnum.NOT_ALLOWED_AUTHORIZATIONS);
@@ -78,7 +78,7 @@ public class RoomsService {
     // 숙소 삭제
     public ResponseDto<?> roomDelete(Long id, Users user) {
         Rooms room = roomsRepository.findById(id).orElseThrow( // 삭제할 게시글 있는지 확인
-                () -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+                () -> new ErrorException(ExceptionEnum.ROOM_NOT_FOUND));
 
         if (!room.getUser().getId().equals(user.getId()))
             throw new ErrorException(ExceptionEnum.NOT_ALLOWED_AUTHORIZATIONS);
@@ -173,7 +173,7 @@ public class RoomsService {
     }
 
     public ResponseDto<?> forTest(Users from) {
-        Users to = userRepository.findByUsername(from.getUsername()).orElseThrow(()->new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+        Users to = userRepository.findByUsername(from.getUsername()).orElseThrow(()->new ErrorException(ExceptionEnum.ROOM_NOT_FOUND));
         notificationService.notifyMe(from, to);
         return ResponseDto.setSuccess("SSE 테스트용 코드!", null);
     }
