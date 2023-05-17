@@ -11,7 +11,7 @@ import com.example.wherebnb.entity.ImageFile;
 import com.example.wherebnb.entity.Likes;
 import com.example.wherebnb.entity.Rooms;
 import com.example.wherebnb.entity.Users;
-import com.example.wherebnb.exception.ApiException;
+import com.example.wherebnb.exception.ErrorException;
 import com.example.wherebnb.exception.ExceptionEnum;
 import com.example.wherebnb.repository.FilesRepository;
 import com.example.wherebnb.repository.LikesRepository;
@@ -43,8 +43,10 @@ public class RoomsService {
     private final NotificationService notificationService;
     private final FilesRepository filesRepository;
     private final UserRepository userRepository;
+//    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     private static final String S3_BUCKET_PREFIX = "S3";
+
 
 //    @Value("${cloud.aws.s3.bucket}")
     @Value(("${cloud.aws.s3.bucket}"))
@@ -62,10 +64,10 @@ public class RoomsService {
     // 숙소 수정
     public ResponseDto<?> roomUpdate(Long id, RoomsRequestDto roomsRequestDto, Users user, List<MultipartFile> images) throws IOException {
         Rooms room = roomsRepository.findById(id).orElseThrow(  // 수정할 게시글 있는지 확인
-                () -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+                () -> new ErrorException(ExceptionEnum.ROOM_NOT_FOUND));
 
         if (!room.getUser().getId().equals(user.getId())) // 권한 체크
-            return ResponseDto.setBadRequest("숙소 수정을 할 수 없습니다.", null);
+            throw  new ErrorException(ExceptionEnum.NOT_ALLOWED_AUTHORIZATIONS);
 
         filesRepository.deleteByRoomId(id); // 해당되는 전체 이미지 삭제
         room.setImageFile(fileFactory(images, room));
@@ -76,10 +78,10 @@ public class RoomsService {
     // 숙소 삭제
     public ResponseDto<?> roomDelete(Long id, Users user) {
         Rooms room = roomsRepository.findById(id).orElseThrow( // 삭제할 게시글 있는지 확인
-                () -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+                () -> new ErrorException(ExceptionEnum.ROOM_NOT_FOUND));
 
         if (!room.getUser().getId().equals(user.getId()))
-            return ResponseDto.setBadRequest("숙소 삭제를 할 수 없습니다.", null);
+            throw new ErrorException(ExceptionEnum.NOT_ALLOWED_AUTHORIZATIONS);
 
         filesRepository.deleteByRoomId(id);
         roomsRepository.delete(room);
@@ -93,10 +95,35 @@ public class RoomsService {
                 .map(x->new HostResponseDto(x.getRooms())).collect(Collectors.toList());
         return ResponseDto.setSuccess("좋아요한 숙소 조회를 완료하였습니다.", likeRoomsList);
     }
-
     // 좋아요 등록
+//    public ResponseDto<Boolean> roomLikes(Long id, Users from) {
+//        executorService.submit(()-> {
+//            try {
+//                processRoomLikes(id, from);
+//            } catch (ApiException e){
+//                log.error("좋아요 누를때 에러가 발생하였습니다", e.getMessage());
+//            }
+//        });
+//        return ResponseDto.setSuccess("좋아요를 눌렀습니다.", true);
+//    }
+//    private void processRoomLikes(Long id, Users from) {
+//        Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+//        boolean likeStatus = true;
+//
+//        if (likesRepository.existsByUserIdAndRoomsId(from.getId(), room.getId())) { // 이미 좋아요한 경우 취소
+//            Likes likes = likesRepository.findByUserIdAndRoomsId(from.getId(), room.getId());
+//            likesRepository.delete(likes);
+//            likeStatus = false;
+//        } else { // 좋아요
+//            Likes likes = new Likes(room, from);
+//            likesRepository.save(likes);
+//            notificationService.notifyLikeEvent(likes, room.getUser()); // 좋아요 알림 보내기
+//        }
+//        room.updateLikes(likeStatus);
+//    }
+
     public ResponseDto<Boolean> roomLikes(Long id, Users from) {
-        Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+        Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ErrorException(ExceptionEnum.ROOM_NOT_FOUND));
         boolean likeStatus = true;
 
         if (likesRepository.existsByUserIdAndRoomsId(from.getId(), room.getId())) { // 이미 좋아요한 경우 취소
@@ -108,7 +135,6 @@ public class RoomsService {
             likesRepository.save(likes);
             notificationService.notifyLikeEvent(likes, room.getUser()); // 좋아요 알림 보내기
         }
-
         room.updateLikes(likeStatus);
         return ResponseDto.setSuccess("좋아요를 눌렀습니다.", likeStatus);
     }
@@ -147,7 +173,7 @@ public class RoomsService {
     }
 
     public ResponseDto<?> forTest(Users from) {
-        Users to = userRepository.findByUsername(from.getUsername()).orElseThrow(()->new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+        Users to = userRepository.findByUsername(from.getUsername()).orElseThrow(()->new ErrorException(ExceptionEnum.ROOM_NOT_FOUND));
         notificationService.notifyMe(from, to);
         return ResponseDto.setSuccess("SSE 테스트용 코드!", null);
     }

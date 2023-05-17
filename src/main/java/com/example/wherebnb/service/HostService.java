@@ -6,7 +6,7 @@ import com.example.wherebnb.dto.host.HostResponseDto;
 import com.example.wherebnb.dto.ResponseDto;
 import com.example.wherebnb.entity.Rooms;
 import com.example.wherebnb.entity.Users;
-import com.example.wherebnb.exception.ApiException;
+import com.example.wherebnb.exception.ErrorException;
 import com.example.wherebnb.exception.ExceptionEnum;
 import com.example.wherebnb.repository.LikesRepository;
 import com.example.wherebnb.repository.RoomsRepository;
@@ -42,7 +42,7 @@ public class HostService {
     }
 
     public ResponseDto<HostDetailResponseDto> getRoomDetail(Long id) {
-        Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+        Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ErrorException(ExceptionEnum.ROOM_NOT_FOUND));
         HostDetailResponseDto hostDetailResponseDto = new HostDetailResponseDto().toHostResponseDto(room);
         return ResponseDto.setSuccess("상세 조회 성공", hostDetailResponseDto);
     }
@@ -82,7 +82,7 @@ public class HostService {
             } else if ("one_week".equals(hostreqeuestdto.getFlexibleTripLengths())) {
                 period = 7;
             } else {
-                throw new ApiException(ExceptionEnum.NOT_FOUND_CONDITION);
+                throw new ErrorException(ExceptionEnum.CONDITION_NOT_FOUND);
             }
             rooms = roomsRepository.findAllByPeriodGreaterThanEqual(period, pageable);
         } else {
