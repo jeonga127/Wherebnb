@@ -42,7 +42,7 @@ public class HostService {
     }
 
     public ResponseDto<HostDetailResponseDto> getRoomDetail(Long id) {
-        Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ApiException(ExceptionEnum.NOT_FOUND_ROOM));
+        Rooms room = roomsRepository.findById(id).orElseThrow(() -> new ErrorException(ExceptionEnum.ROOM_NOT_FOUND));
         HostDetailResponseDto hostDetailResponseDto = new HostDetailResponseDto().toHostResponseDto(room);
         return ResponseDto.setSuccess("상세 조회 성공", hostDetailResponseDto);
     }

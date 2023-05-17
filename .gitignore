@@ -23,7 +23,7 @@ application.properties
 *.iws
 *.iml
 *.ipr
-out/
+src/main/resources/out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
