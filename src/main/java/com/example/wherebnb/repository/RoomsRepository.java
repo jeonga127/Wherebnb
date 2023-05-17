@@ -27,5 +27,10 @@ public interface RoomsRepository extends JpaRepository<Rooms, Long> {
    List<Rooms>findAllByPeriodGreaterThanEqual(
            int period,
            Pageable pageable);
+   List<Rooms>findByCheckInDateGreaterThanEqualAndCheckInDateLessThanEqual(
+           LocalDate startOfMonth,
+           LocalDate endOfMonth,
+           Pageable pageable
+   );
 
 }

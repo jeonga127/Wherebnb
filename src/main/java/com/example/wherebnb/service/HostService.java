@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,12 +72,11 @@ public class HostService {
         return ResponseDto.setSuccess("조건 검색 성공",roomsListByCondition);
     }
 
-    public List<Rooms> ConditionCheck(HostRequestDto hostreqeuestdto, Pageable pageable){
-        LocalDate checkInDate = LocalDate.parse(hostreqeuestdto.getCheckInDate(),  DateTimeFormatter.ISO_DATE);
-        LocalDate checkOutDate = LocalDate.parse(hostreqeuestdto.getCheckOutDate(), DateTimeFormatter.ISO_DATE);
+    public List<Rooms> ConditionCheck(HostRequestDto hostreqeuestdto, Pageable pageable) {
         int guestNum = hostreqeuestdto.getAdultsNum() + hostreqeuestdto.getChildrenNum();
-        List<Rooms> rooms;
+        List<Rooms> rooms = new ArrayList<>();
         int period = 0;
+
         if (!"not_flexible".equals(hostreqeuestdto.getFlexibleTripLengths())) {
             if ("one_month".equals(hostreqeuestdto.getFlexibleTripLengths())) {
                 period = 30;
@@ -84,11 +85,28 @@ public class HostService {
             } else {
                 throw new ErrorException(ExceptionEnum.CONDITION_NOT_FOUND);
             }
-            rooms = roomsRepository.findAllByPeriodGreaterThanEqual(period, pageable);
-        } else {
+            if(hostreqeuestdto.getMonth() != null){
+                List<String> months = Arrays.asList(hostreqeuestdto.getMonth().split(","));
+                int currentYear = LocalDate.now().getYear();
+                for (String monthStr:months) {
+                    int month = Integer.parseInt(monthStr.trim());
+                    LocalDate startOfMonth = LocalDate.of(currentYear, month, 1);
+                    LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+                    if(month<LocalDate.now().getMonthValue()){
+                        currentYear += 1;
+                        startOfMonth = LocalDate.of(currentYear, month, 1);
+                    }
+                    List<Rooms> monthRooms = roomsRepository.findByCheckInDateGreaterThanEqualAndCheckInDateLessThanEqual(startOfMonth, endOfMonth, pageable);
+                    rooms.addAll(monthRooms);
+                }
+            }
+            rooms.retainAll(roomsRepository.findAllByPeriodGreaterThanEqual(period, pageable));
+        } else if (hostreqeuestdto.getCheckInDate() != null && hostreqeuestdto.getCheckOutDate() != null) {
+            LocalDate checkInDate = LocalDate.parse(hostreqeuestdto.getCheckInDate(),  DateTimeFormatter.ISO_DATE);
+            LocalDate checkOutDate = LocalDate.parse(hostreqeuestdto.getCheckOutDate(), DateTimeFormatter.ISO_DATE);
             rooms = roomsRepository.findByCheckInDateLessThanEqualAndCheckOutDateGreaterThanEqual(checkInDate, checkOutDate, pageable);
-
         }
+
         rooms.retainAll (roomsRepository.findByGuestNumLessThanEqualAndInfantExistAndPetExist(guestNum, hostreqeuestdto.isInfantExist(), hostreqeuestdto.isPetExist(), pageable));
         return rooms;
     }
