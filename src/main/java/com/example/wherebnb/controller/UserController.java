@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("user")
+@RequestMapping("user/main")
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/condition")
-    public ResponseDto getUserRoomBycondition(HostRequestDto hostreqeuestdto, @AuthenticationPrincipal UserDetailsImpl userDetails, Pageable pageable) {
+    public ResponseDto getUserRoomByCondition(HostRequestDto hostreqeuestdto, @AuthenticationPrincipal UserDetailsImpl userDetails, Pageable pageable) {
         return hostService.getRoomsByUserAndCondition(hostreqeuestdto, userDetails.getUser(), pageable);
     }
 }

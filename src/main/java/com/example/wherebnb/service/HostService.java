@@ -86,7 +86,7 @@ public class HostService {
                 throw new ErrorException(ExceptionEnum.CONDITION_NOT_FOUND);
             }
             if(hostreqeuestdto.getMonth() != null){
-                List<String> months = Arrays.asList(hostreqeuestdto.getMonth().split(","));
+                String[] months = hostreqeuestdto.getMonth().split(",");
                 int currentYear = LocalDate.now().getYear();
                 for (String monthStr:months) {
                     int month = Integer.parseInt(monthStr.trim());
