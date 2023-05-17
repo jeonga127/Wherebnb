@@ -49,13 +49,13 @@ public class HostService {
         return ResponseDto.setSuccess("상세 조회 성공", hostDetailResponseDto);
     }
 
-    public ResponseDto<List<HostResponseDto>> chooseSearch(String keyword1, String keyword2, Pageable pageable){
-        List<HostResponseDto> roomList =  roomsRepository.findAllByKeyword1OrKeyword2(keyword1, keyword2, pageable).stream().map(HostResponseDto::new).collect(Collectors.toList());
+    public ResponseDto<List<HostResponseDto>> chooseSearch(String keyword, Pageable pageable){
+        List<HostResponseDto> roomList =  roomsRepository.findAllByKeyword1OrKeyword2(keyword, keyword, pageable).stream().map(HostResponseDto::new).collect(Collectors.toList());
         return ResponseDto.setSuccess("키워드 검색 성공", roomList);
     }
 
-    public ResponseDto<List<HostResponseDto>> chooseUsersSearch(String keyword1, String keyword2, Users user, Pageable pageable) {
-        List<HostResponseDto> roomList = roomsRepository.findAllByKeyword1OrKeyword2(keyword1, keyword2, pageable).stream()
+    public ResponseDto<List<HostResponseDto>> chooseUsersSearch(String keyword, Users user, Pageable pageable) {
+        List<HostResponseDto> roomList = roomsRepository.findAllByKeyword1OrKeyword2(keyword, keyword, pageable).stream()
                 .map(x->new HostResponseDto(x, likesRepository.existsByUserIdAndRoomsId(user.getId(), x.getId())))
                 .collect(Collectors.toList());
         return ResponseDto.setSuccess("키워드 검색 성공", roomList);

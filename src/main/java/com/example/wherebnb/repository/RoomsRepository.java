@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface RoomsRepository extends JpaRepository<Rooms, Long> {
+
    Page<Rooms> findAll(Pageable pageable);
 
    List<Rooms> findAllByKeyword1OrKeyword2(String keyword1, String keyword2, Pageable pageable);
@@ -27,10 +28,10 @@ public interface RoomsRepository extends JpaRepository<Rooms, Long> {
    List<Rooms>findAllByPeriodGreaterThanEqual(
            int period,
            Pageable pageable);
+
    List<Rooms>findByCheckInDateGreaterThanEqualAndCheckInDateLessThanEqual(
            LocalDate startOfMonth,
            LocalDate endOfMonth,
            Pageable pageable
    );
-
 }
